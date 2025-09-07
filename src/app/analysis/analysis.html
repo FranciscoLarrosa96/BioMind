@@ -198,7 +198,7 @@
               (click)="showDetailedView.set(!showDetailedView())"
               class="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors duration-200"
             >
-              {{ showDetailedView() ? 'Vista Simple' : 'Vista Detallada' }}
+              {{ showDetailedView() ? 'Ocultar interpretación' : 'Ver interpretación clínica' }}
               <svg class="w-4 h-4 ml-2 transition-transform duration-200" [class.rotate-180]="showDetailedView()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
@@ -234,11 +234,16 @@
                   <p class="text-gray-700 dark:text-gray-300">{{ result.simplified_explanation }}</p>
                 </div>
 
-                <!-- Detailed explanation (conditionally shown) -->
+                <!-- Clinical interpretation (conditionally shown) -->
                 @if (showDetailedView()) {
-                  <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <h5 class="font-medium text-gray-900 dark:text-white mb-2">Información Técnica</h5>
-                    <p class="text-gray-700 dark:text-gray-300 text-sm">{{ result.explanation }}</p>
+                  <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <h5 class="font-medium text-gray-900 dark:text-white mb-2 flex items-center">
+                      <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      ¿Qué indican los valores altos y bajos?
+                    </h5>
+                    <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{{ result.clinical_interpretation }}</p>
                   </div>
                 }
               </div>

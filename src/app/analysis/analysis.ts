@@ -23,8 +23,8 @@ interface AnalysisItem {
   unit: string;
   reference_range: string;
   status: 'normal' | 'high' | 'low' | 'critical';
-  explanation: string;
   simplified_explanation: string;
+  clinical_interpretation: string;
 }
 
 @Component({
@@ -140,8 +140,17 @@ INSTRUCCIONES:
 1. Identifica TODOS los valores de análisis (hemograma, química sanguínea, coagulograma, etc.)
 2. Para cada valor, determina si está NORMAL, ALTO, BAJO o CRÍTICO comparando con los rangos de referencia
 3. Proporciona explicaciones SIMPLES en ESPAÑOL que cualquier persona pueda entender
-4. NO des consejos médicos específicos, solo explica qué significa cada valor
-5. Incluye recomendaciones generales en ESPAÑOL sobre cuándo consultar al médico
+4. Para cada análisis, explica qué puede indicar un VALOR BAJO y qué puede indicar un VALOR ALTO
+5. NO des consejos médicos específicos, solo explica qué significan los valores
+6. Incluye recomendaciones generales en ESPAÑOL sobre cuándo consultar al médico
+
+FORMATO DE EXPLICACIONES REQUERIDO:
+- simplified_explanation: Explicación simple de qué es este análisis
+- clinical_interpretation: "Un valor BAJO puede indicar [explicación]. Un valor ALTO puede indicar [explicación]."
+
+EJEMPLO:
+- simplified_explanation: "Los glóbulos rojos transportan oxígeno por todo el cuerpo"
+- clinical_interpretation: "Un valor BAJO puede indicar anemia, pérdida de sangre o problemas nutricionales. Un valor ALTO puede indicar deshidratación, problemas cardíacos o del pulmón."
 
 IMPORTANTE: 
 - RESPONDE ÚNICAMENTE EN ESPAÑOL
@@ -174,15 +183,15 @@ Extrae TODA la información del análisis y devuelve un JSON estructurado con to
                 type: 'ARRAY',
                 items: {
                   type: 'OBJECT',
-                  required: ['test_name', 'value', 'status', 'explanation', 'simplified_explanation'],
+                  required: ['test_name', 'value', 'status', 'simplified_explanation', 'clinical_interpretation'],
                   properties: {
                     test_name: { type: 'STRING', description: 'Nombre del análisis' },
                     value: { type: 'STRING', description: 'Valor obtenido' },
                     unit: { type: 'STRING', description: 'Unidad de medida' },
                     reference_range: { type: 'STRING', description: 'Rango de referencia normal' },
                     status: { type: 'STRING', enum: ['normal', 'high', 'low', 'critical'], description: 'Estado del valor' },
-                    explanation: { type: 'STRING', description: 'Explicación técnica del análisis' },
-                    simplified_explanation: { type: 'STRING', description: 'Explicación simple para el paciente' }
+                    simplified_explanation: { type: 'STRING', description: 'Explicación simple de qué es este análisis' },
+                    clinical_interpretation: { type: 'STRING', description: 'Explicación de qué indican valores altos y bajos' }
                   }
                 }
               },
