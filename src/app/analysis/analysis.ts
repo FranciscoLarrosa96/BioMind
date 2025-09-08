@@ -369,4 +369,103 @@ FORMATO JSON (sin caracteres especiales que rompan el JSON):
       default: return 'Sin datos';
     }
   }
+
+  getHighValueConditions(testName: string): string {
+    const name = testName.toLowerCase();
+    
+    if (name.includes('glucosa') || name.includes('glucose')) {
+      return '• Diabetes mellitus • Resistencia a la insulina • Síndrome metabólico • Estrés • Medicamentos corticosteroides • Pancreatitis';
+    }
+    if (name.includes('colesterol total') || name.includes('cholesterol')) {
+      return '• Hipercolesterolemia • Riesgo cardiovascular • Enfermedad hepática • Hipotiroidismo • Diabetes • Dieta rica en grasas saturadas';
+    }
+    if (name.includes('triglicéridos') || name.includes('triglycerides')) {
+      return '• Hipertrigliceridemia • Síndrome metabólico • Resistencia a la insulina • Obesidad • Consumo excesivo de alcohol • Pancreatitis';
+    }
+    if (name.includes('urea') || name.includes('bun')) {
+      return '• Insuficiencia renal • Deshidratación • Dieta rica en proteínas • Insuficiencia cardíaca • Sangrado gastrointestinal • Medicamentos nefrotóxicos';
+    }
+    if (name.includes('creatinina') || name.includes('creatinine')) {
+      return '• Insuficiencia renal • Enfermedad renal crónica • Deshidratación severa • Obstrucción urinaria • Medicamentos nefrotóxicos';
+    }
+    if (name.includes('ácido úrico') || name.includes('uric acid')) {
+      return '• Gota • Hiperuricemia • Síndrome metabólico • Insuficiencia renal • Dieta rica en purinas • Alcoholismo';
+    }
+    if (name.includes('transaminasas') || name.includes('alt') || name.includes('ast') || name.includes('got') || name.includes('gpt')) {
+      return '• Hepatitis • Daño hepático • Esteatosis hepática • Cirrosis • Medicamentos hepatotóxicos • Alcoholismo • Infecciones virales';
+    }
+    if (name.includes('bilirrubina') || name.includes('bilirubin')) {
+      return '• Ictericia • Hepatitis • Obstrucción biliar • Anemia hemolítica • Síndrome de Gilbert • Cirrosis';
+    }
+    if (name.includes('hemoglobina') || name.includes('hgb') || name.includes('hb')) {
+      return '• Policitemia • Deshidratación • Enfermedad pulmonar crónica • Tabaquismo • Altitud elevada • Tumores productores de eritropoyetina';
+    }
+    if (name.includes('leucocitos') || name.includes('glóbulos blancos') || name.includes('wbc')) {
+      return '• Infección bacteriana • Leucemia • Estrés físico/emocional • Medicamentos • Inflamación • Necrosis tisular';
+    }
+    if (name.includes('neutrófilos') || name.includes('neutrophils')) {
+      return '• Infección bacteriana aguda • Inflamación • Necrosis • Quemaduras • Medicamentos • Estrés • Tabaquismo';
+    }
+
+    return '• Consulte con su médico para una evaluación personalizada de las posibles causas de este valor elevado';
+  }
+
+  getLowValueConditions(testName: string): string {
+    const name = testName.toLowerCase();
+    
+    if (name.includes('glucosa') || name.includes('glucose')) {
+      return '• Hipoglucemia • Ayuno prolongado • Medicamentos hipoglucemiantes • Insulinoma • Enfermedad hepática • Insuficiencia suprarrenal';
+    }
+    if (name.includes('hemoglobina') || name.includes('hgb') || name.includes('hb')) {
+      return '• Anemia ferropénica • Anemia crónica • Pérdida de sangre • Deficiencia nutricional • Enfermedad renal crónica • Talasemia';
+    }
+    if (name.includes('hematocrito') || name.includes('hct')) {
+      return '• Anemia • Pérdida de sangre • Sobrehidratación • Deficiencias nutricionales • Enfermedad crónica • Hemólisis';
+    }
+    if (name.includes('hierro') || name.includes('iron')) {
+      return '• Anemia ferropénica • Deficiencia dietética • Pérdida de sangre crónica • Malabsorción • Embarazo • Donación frecuente de sangre';
+    }
+    if (name.includes('leucocitos') || name.includes('glóbulos blancos') || name.includes('wbc')) {
+      return '• Infección viral • Medicamentos • Quimioterapia • Enfermedades autoinmunes • Déficit inmunitario • Radiación';
+    }
+    if (name.includes('plaquetas') || name.includes('platelets')) {
+      return '• Trombocitopenia • Medicamentos • Enfermedades autoinmunes • Infecciones virales • Cirrosis • Quimioterapia';
+    }
+    if (name.includes('albúmina') || name.includes('albumin')) {
+      return '• Malnutrición • Enfermedad hepática • Enfermedad renal • Inflamación crónica • Malabsorción • Pérdida proteica';
+    }
+    if (name.includes('proteínas totales') || name.includes('total protein')) {
+      return '• Malnutrición • Enfermedad hepática • Enfermedad renal • Malabsorción • Infecciones crónicas • Pérdida proteica';
+    }
+    if (name.includes('vitamina') || name.includes('vitamin')) {
+      return '• Deficiencia nutricional • Malabsorción • Dieta inadecuada • Alcoholismo • Medicamentos • Enfermedades digestivas';
+    }
+
+    return '• Consulte con su médico para evaluar las posibles causas de este valor bajo y determinar si requiere suplementación';
+  }
+
+  getCriticalValueConditions(testName: string): string {
+    const name = testName.toLowerCase();
+    
+    if (name.includes('glucosa') || name.includes('glucose')) {
+      return '• Crisis diabética (hiperglucemia severa) • Cetoacidosis diabética • Estado hiperosmolar • Hipoglucemia severa • Shock • Coma';
+    }
+    if (name.includes('creatinina') || name.includes('creatinine')) {
+      return '• Insuficiencia renal aguda • Falla renal • Obstrucción urinaria severa • Shock • Deshidratación crítica • Rabdomiólisis';
+    }
+    if (name.includes('potasio') || name.includes('potassium')) {
+      return '• Arritmias cardíacas peligrosas • Hiperpotasemia/hipopotasemia severa • Paro cardíaco • Parálisis muscular • Insuficiencia renal';
+    }
+    if (name.includes('hemoglobina') || name.includes('hgb') || name.includes('hb')) {
+      return '• Anemia severa • Hemorragia aguda • Shock hipovolémico • Insuficiencia cardíaca • Necesidad de transfusión urgente';
+    }
+    if (name.includes('leucocitos') || name.includes('glóbulos blancos') || name.includes('wbc')) {
+      return '• Sepsis • Leucemia aguda • Neutropenia severa • Infección sistémica grave • Shock séptico • Inmunosupresión crítica';
+    }
+    if (name.includes('plaquetas') || name.includes('platelets')) {
+      return '• Trombocitopenia severa • Riesgo de hemorragia espontánea • Púrpura trombocitopénica • CID • Necesidad de transfusión';
+    }
+
+    return '• ATENCIÓN MÉDICA URGENTE: Este valor crítico requiere evaluación inmediata para prevenir complicaciones graves';
+  }
 }
