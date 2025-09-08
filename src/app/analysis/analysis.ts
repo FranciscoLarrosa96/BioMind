@@ -10,21 +10,18 @@ interface AnalysisResult {
   patient_name: string;
   test_date: string;
   laboratory: string;
-  doctor: string;
   results: AnalysisItem[];
   summary: string;
   recommendations: string[];
-  confidence: number;
 }
 
 interface AnalysisItem {
   test_name: string;
   value: string;
-  unit: string;
-  reference_range: string;
+  unit?: string;
+  reference_range?: string;
   status: 'normal' | 'high' | 'low' | 'critical';
-  simplified_explanation: string;
-  clinical_interpretation: string;
+  [key: string]: any; // Para permitir propiedades dinámicas como explanation y warning
 }
 
 @Component({
@@ -132,35 +129,53 @@ export class Analysis {
     try {
       const b64 = await this.fileToBase64(f);
 
-      const prompt = `Analiza este PDF de análisis médico de laboratorio y extrae la información completa. 
+      const prompt = `Analiza este PDF de análisis médico de laboratorio argentino y extrae toda la información.
 
-⚠️ IMPORTANTE: Responde SIEMPRE en ESPAÑOL. Todas las explicaciones, recomendaciones y textos deben estar en español.
+IMPORTANTE: Este laboratorio puede ser UNILAB, PEREZ CAMBET u otro. Los valores pueden ser:
+- Numéricos: "129 mg/dL", "7,3 kUI/L"
+- Cualitativos: "NEGATIVO", "POSITIVO", "menor que 1,9 U"
+- En proceso: "Resultado en proceso", "En proceso..."
 
 INSTRUCCIONES:
-1. Identifica TODOS los valores de análisis (hemograma, química sanguínea, coagulograma, etc.)
-2. Para cada valor, determina si está NORMAL, ALTO, BAJO o CRÍTICO comparando con los rangos de referencia
-3. Proporciona explicaciones SIMPLES en ESPAÑOL que cualquier persona pueda entender
-4. Para cada análisis, explica qué puede indicar un VALOR BAJO y qué puede indicar un VALOR ALTO
-5. NO des consejos médicos específicos, solo explica qué significan los valores
-6. Incluye recomendaciones generales en ESPAÑOL sobre cuándo consultar al médico
+1. Extrae TODOS los análisis, incluso los cualitativos (NEGATIVO, POSITIVO, etc.)
+2. Para valores numéricos, compara con rangos de referencia
+3. Para valores cualitativos: NEGATIVO = normal, POSITIVO = puede ser anormal
+4. Para valores "en proceso": marcar como normal temporalmente
+5. SIEMPRE incluye advertencias para valores anormales
 
-FORMATO DE EXPLICACIONES REQUERIDO:
-- simplified_explanation: Explicación simple de qué es este análisis
-- clinical_interpretation: "Un valor BAJO puede indicar [explicación]. Un valor ALTO puede indicar [explicación]."
+TIPOS DE ANÁLISIS A EXTRAER:
+- INMUNOSEROLOGÍA: Anti-transglutaminasa, Inmunoglobulina A, etc.
+- PERFIL TIROIDEO: TSH, T4, anticuerpos
+- SEROLOGÍA: Helicobacter pylori, Hepatitis, etc.
+- EXAMEN DE ORINA: Color, aspecto, densidad, proteínas, etc.
+- ESTUDIOS EN MATERIA FECAL: Sangre oculta
 
-EJEMPLO:
-- simplified_explanation: "Los glóbulos rojos transportan oxígeno por todo el cuerpo"
-- clinical_interpretation: "Un valor BAJO puede indicar anemia, pérdida de sangre o problemas nutricionales. Un valor ALTO puede indicar deshidratación, problemas cardíacos o del pulmón."
+ADVERTENCIAS ESPECÍFICAS:
+- Anticuerpos positivos: "⚠️ Resultado positivo puede indicar enfermedad autoinmune. Consulte con su médico"
+- Inmunoglobulina alta: "⚠️ Puede indicar inflamación o infección. Requiere evaluación médica"
+- TSH alterada: "⚠️ Alteración tiroidea. Consulte con endocrinólogo"
+- Proteínas en orina: "⚠️ Posible problema renal. Consulte con su médico"
+- Sangre oculta positiva: "⚠️ Requiere evaluación gastroenterológica urgente"
 
-IMPORTANTE: 
-- RESPONDE ÚNICAMENTE EN ESPAÑOL
-- Usa lenguaje simple y comprensible para el público general hispanohablante
-- Evita terminología médica compleja, usa términos simples en español
-- Siempre recomienda consultar con un profesional médico
-- Marca como "critical" valores que requieren atención médica urgente
-- Todas las explicaciones deben estar en español argentino/latinoamericano
-
-Extrae TODA la información del análisis y devuelve un JSON estructurado con todo el contenido en ESPAÑOL.`;
+FORMATO JSON (sin caracteres especiales que rompan el JSON):
+{
+  "patient_name": "nombre",
+  "test_date": "fecha", 
+  "laboratory": "laboratorio",
+  "results": [
+    {
+      "test_name": "nombre completo del análisis",
+      "value": "valor exacto encontrado",
+      "unit": "unidad si hay",
+      "reference_range": "rango normal si hay",
+      "status": "normal/high/low/critical",
+      "explanation": "explicación simple sin comillas internas",
+      "warning": "advertencia específica o null"
+    }
+  ],
+  "summary": "resumen del estado general",
+  "recommendations": ["recomendaciones generales"]
+}`;
 
       const body = {
         contents: [{
@@ -173,40 +188,42 @@ Extrae TODA la información del análisis y devuelve un JSON estructurado con to
           responseMimeType: 'application/json',
           responseSchema: {
             type: 'OBJECT',
-            required: ['patient_name', 'results', 'summary', 'confidence'],
+            required: ['patient_name', 'results', 'summary'],
             properties: {
               patient_name: { type: 'STRING', description: 'Nombre del paciente' },
-              test_date: { type: 'STRING', description: 'Fecha del análisis (YYYY-MM-DD)' },
+              test_date: { type: 'STRING', description: 'Fecha del análisis' },
               laboratory: { type: 'STRING', description: 'Nombre del laboratorio' },
-              doctor: { type: 'STRING', description: 'Médico solicitante' },
               results: {
                 type: 'ARRAY',
                 items: {
                   type: 'OBJECT',
-                  required: ['test_name', 'value', 'status', 'simplified_explanation', 'clinical_interpretation'],
+                  required: ['test_name', 'value', 'status', 'explanation'],
                   properties: {
                     test_name: { type: 'STRING', description: 'Nombre del análisis' },
                     value: { type: 'STRING', description: 'Valor obtenido' },
                     unit: { type: 'STRING', description: 'Unidad de medida' },
                     reference_range: { type: 'STRING', description: 'Rango de referencia normal' },
                     status: { type: 'STRING', enum: ['normal', 'high', 'low', 'critical'], description: 'Estado del valor' },
-                    simplified_explanation: { type: 'STRING', description: 'Explicación simple de qué es este análisis' },
-                    clinical_interpretation: { type: 'STRING', description: 'Explicación de qué indican valores altos y bajos' }
+                    explanation: { type: 'STRING', description: 'Explicación simple de qué es este análisis' },
+                    warning: { type: 'STRING', description: 'Advertencia específica para valores altos/críticos, null si es normal' }
                   }
                 }
               },
-              summary: { type: 'STRING', description: 'Resumen general del análisis en lenguaje simple' },
+              summary: { type: 'STRING', description: 'Resumen general del análisis' },
               recommendations: {
                 type: 'ARRAY',
                 items: { type: 'STRING' },
-                description: 'Recomendaciones generales (no consejos médicos específicos)'
-              },
-              confidence: { type: 'NUMBER', minimum: 0, maximum: 1, description: 'Confianza en el análisis' }
+                description: 'Recomendaciones generales'
+              }
             }
           },
           maxOutputTokens: 4000
         }
       };
+
+      // Crear un timeout para la petición
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 segundos
 
       const resp = await fetch(`${environment.apiBase}/ai/generate`, {
         method: 'POST',
@@ -215,21 +232,109 @@ Extrae TODA la información del análisis y devuelve un JSON estructurado con to
           model: 'gemini-2.5-flash-lite',
           payload: body
         }),
+        signal: controller.signal
       });
 
+      clearTimeout(timeoutId);
+
       if (!resp.ok) {
-        const t = await resp.text().catch(() => '');
-        throw new Error(t || `HTTP ${resp.status}`);
+        const errorText = await resp.text().catch(() => '');
+        throw new Error(errorText || `Error HTTP ${resp.status}`);
       }
 
       const raw = await resp.json();
       const text = raw?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-      const result = JSON.parse(text) as AnalysisResult;
-
-      this.analysisResult.set(result);
+      
+      // Limpiar el texto JSON para evitar errores de parsing
+      let cleanText = text.trim();
+      
+      // Remover posibles marcadores de código si existen
+      if (cleanText.startsWith('```json')) {
+        cleanText = cleanText.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      }
+      if (cleanText.startsWith('```')) {
+        cleanText = cleanText.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      }
+      
+      let result: AnalysisResult;
+      
+      try {
+        result = JSON.parse(cleanText) as AnalysisResult;
+        
+        // Validar que el resultado tenga la estructura mínima esperada
+        if (!result || typeof result !== 'object') {
+          throw new Error('Respuesta inválida de la IA');
+        }
+        
+        if (!result.results || !Array.isArray(result.results)) {
+          throw new Error('La respuesta no contiene resultados válidos');
+        }
+        
+        // Asegurar valores por defecto para evitar errores
+        result.patient_name = result.patient_name || 'No especificado';
+        result.test_date = result.test_date || '';
+        result.laboratory = result.laboratory || '';
+        result.summary = result.summary || 'Análisis procesado correctamente';
+        result.recommendations = result.recommendations || ['Consulte con su médico para la interpretación completa'];
+        
+        // Validar cada resultado
+        result.results = result.results.map(item => ({
+          test_name: item.test_name || 'Sin nombre',
+          value: item.value || 'N/A',
+          unit: item.unit || '',
+          reference_range: item.reference_range || '',
+          status: ['normal', 'high', 'low', 'critical'].includes(item.status) ? item.status : 'normal',
+          explanation: item['explanation'] || 'Análisis médico',
+          warning: item['warning'] || null
+        }));
+        
+        this.analysisResult.set(result);
+        
+      } catch (parseError: any) {
+        console.error('Error al parsear JSON:', parseError);
+        console.error('Texto recibido:', cleanText);
+        
+        // Si el JSON parsing falla, crear un resultado de fallback
+        const fallbackResult: AnalysisResult = {
+          patient_name: 'Error en el procesamiento',
+          test_date: '',
+          laboratory: 'Formato no reconocido',
+          results: [],
+          summary: 'Hubo un problema al procesar el análisis. El formato del PDF de este laboratorio podría no ser completamente compatible con el sistema.',
+          recommendations: [
+            'Verifique que el PDF sea un análisis médico válido y de buena calidad',
+            'Intente con una versión más reciente del análisis',
+            'Contacte al laboratorio para obtener el análisis en formato digital',
+            'Consulte con su médico para la interpretación manual del análisis'
+          ]
+        };
+        
+        this.analysisResult.set(fallbackResult);
+        this.error.set('El análisis se procesó parcialmente. El formato de este laboratorio podría requerir ajustes adicionales.');
+      }
 
     } catch (e: any) {
-      this.error.set(e?.message || 'No se pudo analizar el PDF. Verificá que sea un análisis médico válido.');
+      console.error('Error completo en análisis:', e);
+      
+      let errorMessage = 'No se pudo analizar el PDF.';
+      
+      if (e.name === 'AbortError') {
+        errorMessage = 'El análisis tardó demasiado tiempo. El PDF podría ser muy grande o complejo.';
+      } else if (e.message?.includes('Failed to fetch') || e.message?.includes('NetworkError')) {
+        errorMessage = 'Error de conexión. Verifique su conexión a internet y que el servidor esté funcionando.';
+      } else if (e.message?.includes('JSON')) {
+        errorMessage = 'Error al procesar la respuesta del análisis. Intente nuevamente.';
+      } else if (e.message?.includes('HTTP 400')) {
+        errorMessage = 'El PDF no pudo ser procesado. Verifique que sea un análisis médico válido y no esté dañado.';
+      } else if (e.message?.includes('HTTP 429')) {
+        errorMessage = 'Demasiadas solicitudes. Espere unos minutos antes de intentar nuevamente.';
+      } else if (e.message?.includes('HTTP 500')) {
+        errorMessage = 'Error temporal del servidor. Intente nuevamente en unos minutos.';
+      } else if (e.message?.includes('HTTP 503')) {
+        errorMessage = 'El servicio está temporalmente no disponible. Intente más tarde.';
+      }
+      
+      this.error.set(errorMessage);
     } finally {
       this.isProcessing.set(false);
     }
