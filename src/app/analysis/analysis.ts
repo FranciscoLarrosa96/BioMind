@@ -1,4 +1,4 @@
-import { Component, computed, signal, inject } from '@angular/core';
+import { Component, computed, signal, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UtilService } from '../services/util';
@@ -17,11 +17,15 @@ interface AnalysisResult {
 
 interface AnalysisItem {
   test_name: string;
-  value: string;
-  unit?: string;
-  reference_range?: string;
+  value: string | null;
+  unit?: string | null;
+  reference_range?: string | null;
   status: 'normal' | 'high' | 'low' | 'critical';
-  [key: string]: any; // Para permitir propiedades dinámicas como explanation y warning
+  simplified_explanation: string;
+  clinical_interpretation: string;
+  warning?: string | null;
+  // Mantener compatibilidad con campos antiguos
+  explanation?: string;
 }
 
 @Component({
@@ -41,6 +45,40 @@ export class Analysis {
   analysisResult = signal<AnalysisResult | null>(null);
   isDragOver = signal<boolean>(false);
   showDetailedView = signal<boolean>(false);
+  showOnlyAbnormal = signal<boolean>(false);
+
+  constructor() {
+    // Effect para limpiar errores cuando se selecciona un nuevo archivo
+    effect(() => {
+      const file = this.file();
+      if (file) {
+        this.error.set(null);
+        this.analysisResult.set(null);
+      }
+    });
+
+    // Effect para scroll automático cuando hay resultados
+    effect(() => {
+      const results = this.analysisResult();
+      if (results) {
+        // Pequeño delay para que el DOM se actualice
+        setTimeout(() => {
+          const resultsSection = document.getElementById('results-section');
+          if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      }
+    });
+
+    // Effect para logging reactivo (útil para debugging)
+    effect(() => {
+      const stats = this.stats();
+      if (stats && stats.total > 0) {
+        console.log('📊 Estadísticas actualizadas:', stats);
+      }
+    });
+  }
 
   // Computed para estadísticas rápidas
   stats = computed(() => {
@@ -56,9 +94,60 @@ export class Analysis {
     return { total, normal, high, low, critical };
   });
 
+  // Computed para verificar si hay archivo seleccionado
+  hasFile = computed(() => this.file() !== null);
+
+  // Computed para verificar si hay resultados
+  hasResults = computed(() => this.analysisResult() !== null);
+
+  // Computed para verificar si puede analizar
+  canAnalyze = computed(() => this.hasFile() && !this.isProcessing());
+
+  // Computed para filtrar resultados por estado
+  normalResults = computed(() => 
+    this.analysisResult()?.results.filter(r => r.status === 'normal') || []
+  );
+
+  abnormalResults = computed(() => 
+    this.analysisResult()?.results.filter(r => r.status !== 'normal') || []
+  );
+
+  criticalResults = computed(() => 
+    this.analysisResult()?.results.filter(r => r.status === 'critical') || []
+  );
+
+  // Computed para mensajes de estado
+  statusMessage = computed(() => {
+    if (this.isProcessing()) return 'Analizando documento...';
+    if (this.error()) return this.error();
+    if (this.hasResults()) return '¡Análisis completado!';
+    if (this.hasFile()) return 'Archivo listo para analizar';
+    return 'Sube un PDF de análisis médico';
+  });
+
+  // Computed para el color del mensaje de estado
+  statusColor = computed(() => {
+    if (this.error()) return 'text-red-600 dark:text-red-400';
+    if (this.hasResults()) return 'text-green-600 dark:text-green-400';
+    if (this.hasFile()) return 'text-blue-600 dark:text-blue-400';
+    return 'text-gray-600 dark:text-gray-400';
+  });
+
+  // Computed para resultados visibles según el filtro
+  visibleResults = computed(() => {
+    const results = this.analysisResult()?.results || [];
+    if (this.showOnlyAbnormal()) {
+      return results.filter(r => r.status !== 'normal');
+    }
+    return results;
+  });
+
+  // Computed para texto del botón de filtro
+  filterButtonText = computed(() => 
+    this.showOnlyAbnormal() ? 'Mostrar todos' : 'Solo anormales'
+  );
+
   onPick(e: Event) {
-    this.error.set(null);
-    this.analysisResult.set(null);
     const input = e.target as HTMLInputElement;
     const f = input.files?.[0] || null;
     this.handleFile(f);
@@ -129,53 +218,87 @@ export class Analysis {
     try {
       const b64 = await this.fileToBase64(f);
 
-      const prompt = `Analiza este PDF de análisis médico de laboratorio argentino y extrae toda la información.
+      const prompt = `Analiza este PDF de análisis médico de laboratorio y extrae toda la información de forma ROBUSTA.
 
-IMPORTANTE: Este laboratorio puede ser UNILAB, PEREZ CAMBET u otro. Los valores pueden ser:
-- Numéricos: "129 mg/dL", "7,3 kUI/L"
-- Cualitativos: "NEGATIVO", "POSITIVO", "menor que 1,9 U"
-- En proceso: "Resultado en proceso", "En proceso..."
+⚠️ CRÍTICO: SIEMPRE responde en ESPAÑOL y maneja TODOS los formatos de laboratorio.
 
-INSTRUCCIONES:
-1. Extrae TODOS los análisis, incluso los cualitativos (NEGATIVO, POSITIVO, etc.)
-2. Para valores numéricos, compara con rangos de referencia
-3. Para valores cualitativos: NEGATIVO = normal, POSITIVO = puede ser anormal
-4. Para valores "en proceso": marcar como normal temporalmente
-5. SIEMPRE incluye advertencias para valores anormales
+TIPOS DE LABORATORIOS COMPATIBLES:
+- UNILAB, PEREZ CAMBET, DIAGNOS, HIDALGO, CEMIC, SWISS MEDICAL
+- Laboratorios públicos (Hospital Italiano, Británico, etc.)
+- Cualquier formato estándar argentino
 
-TIPOS DE ANÁLISIS A EXTRAER:
-- INMUNOSEROLOGÍA: Anti-transglutaminasa, Inmunoglobulina A, etc.
-- PERFIL TIROIDEO: TSH, T4, anticuerpos
-- SEROLOGÍA: Helicobacter pylori, Hepatitis, etc.
-- EXAMEN DE ORINA: Color, aspecto, densidad, proteínas, etc.
-- ESTUDIOS EN MATERIA FECAL: Sangre oculta
+VALORES A EXTRAER (SIN EXCEPCIÓN):
+1. **HEMOGRAMA COMPLETO**: Glóbulos rojos, blancos, plaquetas, hematocrito, hemoglobina, etc.
+2. **QUÍMICA SANGUÍNEA**: Glucosa, colesterol, triglicéridos, creatinina, urea, etc.
+3. **PERFIL TIROIDEO**: TSH, T3, T4, anticuerpos tiroideos
+4. **HEPATOGRAMA**: Transaminasas (ALT/AST), bilirrubina, fosfatasa alcalina
+5. **COAGULOGRAMA**: TP, KPTT, INR, fibrinógeno
+6. **INMUNOSEROLOGÍA**: Anti-transglutaminasa, inmunoglobulinas, anticuerpos
+7. **SEROLOGÍA**: Hepatitis, Chagas, VDRL, Helicobacter pylori
+8. **EXAMEN DE ORINA**: Color, aspecto, densidad, proteínas, glucosa, sangre, leucocitos
+9. **MATERIA FECAL**: Sangre oculta, parásitos, coprocultivo
+10. **PROTEÍNAS**: Albúmina, proteínas totales, electroforesis
+11. **LIPIDOGRAMA**: Colesterol total, HDL, LDL, triglicéridos
+12. **ELECTROLITOS**: Sodio, potasio, cloro, calcio, magnesio
+13. **MARCADORES CARDÍACOS**: Troponina, CK-MB
+14. **MARCADORES TUMORALES**: PSA, CEA, CA 19-9, etc.
 
-ADVERTENCIAS ESPECÍFICAS:
-- Anticuerpos positivos: "⚠️ Resultado positivo puede indicar enfermedad autoinmune. Consulte con su médico"
-- Inmunoglobulina alta: "⚠️ Puede indicar inflamación o infección. Requiere evaluación médica"
-- TSH alterada: "⚠️ Alteración tiroidea. Consulte con endocrinólogo"
-- Proteínas en orina: "⚠️ Posible problema renal. Consulte con su médico"
-- Sangre oculta positiva: "⚠️ Requiere evaluación gastroenterológica urgente"
+MANEJO DE DIFERENTES FORMATOS:
+- **Valores numéricos**: "129", "7,3", "12.5", "< 0,5", "> 100"
+- **Valores cualitativos**: "NEGATIVO", "POSITIVO", "REACTIVO", "NO REACTIVO"
+- **Valores en proceso**: "Resultado en proceso", "Pendiente", "En curso"
+- **Valores ausentes**: Si no está presente, usar null
 
-FORMATO JSON (sin caracteres especiales que rompan el JSON):
+REGLAS DE INTERPRETACIÓN:
+- NEGATIVO/NO REACTIVO = normal
+- POSITIVO/REACTIVO = puede ser anormal (evaluar contexto)
+- Valores < o > límites = comparar con rangos
+- "En proceso" = normal temporalmente
+- Si no hay rango de referencia, usar conocimiento médico estándar
+
+CLASIFICACIÓN DE STATUS:
+- **normal**: Within reference range o valores normales esperados
+- **high**: Above reference range o valores elevados
+- **low**: Below reference range o valores bajos  
+- **critical**: Valores que requieren atención médica inmediata
+
+MANEJO DE ERRORES:
+- Si un campo no está disponible, usar null
+- Si hay dudas sobre un valor, marcarlo como normal
+- NUNCA dejar campos requeridos vacíos
+- Si el texto es ilegible, usar "No legible" como valor
+
+FORMATO JSON REQUERIDO (estructura exacta):
 {
-  "patient_name": "nombre",
-  "test_date": "fecha", 
-  "laboratory": "laboratorio",
+  "patient_name": "nombre del paciente o null",
+  "test_date": "fecha del análisis o null",
+  "laboratory": "nombre del laboratorio o null", 
   "results": [
     {
       "test_name": "nombre completo del análisis",
-      "value": "valor exacto encontrado",
-      "unit": "unidad si hay",
-      "reference_range": "rango normal si hay",
+      "value": "valor exacto encontrado o null",
+      "unit": "unidad de medida o null",
+      "reference_range": "rango de referencia o null",
       "status": "normal/high/low/critical",
-      "explanation": "explicación simple sin comillas internas",
-      "warning": "advertencia específica o null"
+      "simplified_explanation": "explicación simple de qué es este análisis",
+      "clinical_interpretation": "Un valor BAJO puede indicar X. Un valor ALTO puede indicar Y.",
+      "warning": "advertencia específica para valores anormales o null"
     }
   ],
-  "summary": "resumen del estado general",
-  "recommendations": ["recomendaciones generales"]
-}`;
+  "summary": "resumen general del estado de salud basado en todos los valores",
+  "recommendations": ["lista de recomendaciones generales"]
+}
+
+EJEMPLOS DE CLINICAL_INTERPRETATION:
+- "Un valor BAJO puede indicar anemia o pérdida de sangre. Un valor ALTO puede indicar deshidratación o problemas pulmonares."
+- "Un valor BAJO puede indicar hipotiroidismo. Un valor ALTO puede indicar hipertiroidismo."
+- "Un valor BAJO es generalmente normal. Un valor ALTO puede indicar infección o inflamación."
+
+IMPORTANTE: 
+- SIEMPRE incluir simplified_explanation y clinical_interpretation
+- NUNCA usar comillas internas que rompan el JSON
+- Si hay valores críticos, incluir warning específico
+- Ser conservador: si hay duda, marcar como normal`;
 
       const body = {
         contents: [{
@@ -197,15 +320,16 @@ FORMATO JSON (sin caracteres especiales que rompan el JSON):
                 type: 'ARRAY',
                 items: {
                   type: 'OBJECT',
-                  required: ['test_name', 'value', 'status', 'explanation'],
+                  required: ['test_name', 'status', 'simplified_explanation', 'clinical_interpretation'],
                   properties: {
-                    test_name: { type: 'STRING', description: 'Nombre del análisis' },
-                    value: { type: 'STRING', description: 'Valor obtenido' },
-                    unit: { type: 'STRING', description: 'Unidad de medida' },
-                    reference_range: { type: 'STRING', description: 'Rango de referencia normal' },
+                    test_name: { type: 'STRING', description: 'Nombre completo del análisis' },
+                    value: { type: 'STRING', description: 'Valor obtenido, null si no disponible' },
+                    unit: { type: 'STRING', description: 'Unidad de medida, null si no disponible' },
+                    reference_range: { type: 'STRING', description: 'Rango de referencia, null si no disponible' },
                     status: { type: 'STRING', enum: ['normal', 'high', 'low', 'critical'], description: 'Estado del valor' },
-                    explanation: { type: 'STRING', description: 'Explicación simple de qué es este análisis' },
-                    warning: { type: 'STRING', description: 'Advertencia específica para valores altos/críticos, null si es normal' }
+                    simplified_explanation: { type: 'STRING', description: 'Explicación simple de qué es este análisis' },
+                    clinical_interpretation: { type: 'STRING', description: 'Qué indican valores altos y bajos' },
+                    warning: { type: 'STRING', description: 'Advertencia específica para valores anormales, null si normal' }
                   }
                 }
               },
@@ -280,12 +404,15 @@ FORMATO JSON (sin caracteres especiales que rompan el JSON):
         // Validar cada resultado
         result.results = result.results.map(item => ({
           test_name: item.test_name || 'Sin nombre',
-          value: item.value || 'N/A',
-          unit: item.unit || '',
-          reference_range: item.reference_range || '',
+          value: item.value || null,
+          unit: item.unit || null,
+          reference_range: item.reference_range || null,
           status: ['normal', 'high', 'low', 'critical'].includes(item.status) ? item.status : 'normal',
-          explanation: item['explanation'] || 'Análisis médico',
-          warning: item['warning'] || null
+          simplified_explanation: item.simplified_explanation || item['explanation'] || 'Análisis médico de laboratorio',
+          clinical_interpretation: item.clinical_interpretation || 'Los valores de este análisis pueden variar según múltiples factores. Consulte con su médico.',
+          warning: item.warning || null,
+          // Mantener compatibilidad
+          explanation: item['explanation'] || item.simplified_explanation || 'Análisis médico'
         }));
         
         this.analysisResult.set(result);
