@@ -205,6 +205,12 @@ export class Analysis {
     return dataUrl.split(',')[1] || '';
   }
 
+  // Helper para extraer patrones de texto plano
+  private extractPatternFromText(text: string, pattern: RegExp): string | null {
+    const match = text.match(pattern);
+    return match ? match[1].trim() : null;
+  }
+
   async analyzeWithAI(): Promise<void> {
     const f = this.file();
     if (!f) {
@@ -218,87 +224,56 @@ export class Analysis {
     try {
       const b64 = await this.fileToBase64(f);
 
-      const prompt = `Analiza este PDF de análisis médico de laboratorio y extrae toda la información de forma ROBUSTA.
+      const prompt = `Analiza este PDF de análisis médico y extrae información ESTRUCTURADA.
 
-⚠️ CRÍTICO: SIEMPRE responde en ESPAÑOL y maneja TODOS los formatos de laboratorio.
+⚠️ CRÍTICO: Responde SIEMPRE con JSON válido en español, incluso si el formato es desconocido.
 
-TIPOS DE LABORATORIOS COMPATIBLES:
-- UNILAB, PEREZ CAMBET, DIAGNOS, HIDALGO, CEMIC, SWISS MEDICAL
-- Laboratorios públicos (Hospital Italiano, Británico, etc.)
-- Cualquier formato estándar argentino
+IMPORTANTE: Si NO puedes extraer valores específicos, devuelve un JSON con results vacío pero con información del documento.
 
-VALORES A EXTRAER (SIN EXCEPCIÓN):
-1. **HEMOGRAMA COMPLETO**: Glóbulos rojos, blancos, plaquetas, hematocrito, hemoglobina, etc.
-2. **QUÍMICA SANGUÍNEA**: Glucosa, colesterol, triglicéridos, creatinina, urea, etc.
-3. **PERFIL TIROIDEO**: TSH, T3, T4, anticuerpos tiroideos
-4. **HEPATOGRAMA**: Transaminasas (ALT/AST), bilirrubina, fosfatasa alcalina
-5. **COAGULOGRAMA**: TP, KPTT, INR, fibrinógeno
-6. **INMUNOSEROLOGÍA**: Anti-transglutaminasa, inmunoglobulinas, anticuerpos
-7. **SEROLOGÍA**: Hepatitis, Chagas, VDRL, Helicobacter pylori
-8. **EXAMEN DE ORINA**: Color, aspecto, densidad, proteínas, glucosa, sangre, leucocitos
-9. **MATERIA FECAL**: Sangre oculta, parásitos, coprocultivo
-10. **PROTEÍNAS**: Albúmina, proteínas totales, electroforesis
-11. **LIPIDOGRAMA**: Colesterol total, HDL, LDL, triglicéridos
-12. **ELECTROLITOS**: Sodio, potasio, cloro, calcio, magnesio
-13. **MARCADORES CARDÍACOS**: Troponina, CK-MB
-14. **MARCADORES TUMORALES**: PSA, CEA, CA 19-9, etc.
-
-MANEJO DE DIFERENTES FORMATOS:
-- **Valores numéricos**: "129", "7,3", "12.5", "< 0,5", "> 100"
-- **Valores cualitativos**: "NEGATIVO", "POSITIVO", "REACTIVO", "NO REACTIVO"
-- **Valores en proceso**: "Resultado en proceso", "Pendiente", "En curso"
-- **Valores ausentes**: Si no está presente, usar null
-
-REGLAS DE INTERPRETACIÓN:
-- NEGATIVO/NO REACTIVO = normal
-- POSITIVO/REACTIVO = puede ser anormal (evaluar contexto)
-- Valores < o > límites = comparar con rangos
-- "En proceso" = normal temporalmente
-- Si no hay rango de referencia, usar conocimiento médico estándar
-
-CLASIFICACIÓN DE STATUS:
-- **normal**: Within reference range o valores normales esperados
-- **high**: Above reference range o valores elevados
-- **low**: Below reference range o valores bajos  
-- **critical**: Valores que requieren atención médica inmediata
-
-MANEJO DE ERRORES:
-- Si un campo no está disponible, usar null
-- Si hay dudas sobre un valor, marcarlo como normal
-- NUNCA dejar campos requeridos vacíos
-- Si el texto es ilegible, usar "No legible" como valor
-
-FORMATO JSON REQUERIDO (estructura exacta):
+ESTRUCTURA JSON OBLIGATORIA (copia esto y completa):
 {
   "patient_name": "nombre del paciente o null",
-  "test_date": "fecha del análisis o null",
-  "laboratory": "nombre del laboratorio o null", 
+  "test_date": "fecha en formato DD/MM/YYYY o null",
+  "laboratory": "nombre del laboratorio o null",
   "results": [
     {
-      "test_name": "nombre completo del análisis",
-      "value": "valor exacto encontrado o null",
-      "unit": "unidad de medida o null",
-      "reference_range": "rango de referencia o null",
-      "status": "normal/high/low/critical",
-      "simplified_explanation": "explicación simple de qué es este análisis",
+      "test_name": "Nombre del análisis",
+      "value": "valor encontrado o null",
+      "unit": "unidad o null",
+      "reference_range": "rango normal o null",
+      "status": "normal",
+      "simplified_explanation": "Explicación simple del análisis",
       "clinical_interpretation": "Un valor BAJO puede indicar X. Un valor ALTO puede indicar Y.",
-      "warning": "advertencia específica para valores anormales o null"
+      "warning": null
     }
   ],
-  "summary": "resumen general del estado de salud basado en todos los valores",
-  "recommendations": ["lista de recomendaciones generales"]
+  "summary": "Resumen del documento en español",
+  "recommendations": ["Lista de recomendaciones en español"]
 }
 
-EJEMPLOS DE CLINICAL_INTERPRETATION:
-- "Un valor BAJO puede indicar anemia o pérdida de sangre. Un valor ALTO puede indicar deshidratación o problemas pulmonares."
-- "Un valor BAJO puede indicar hipotiroidismo. Un valor ALTO puede indicar hipertiroidismo."
-- "Un valor BAJO es generalmente normal. Un valor ALTO puede indicar infección o inflamación."
+REGLAS ESTRICTAS:
+1. SIEMPRE devuelve JSON válido, NUNCA texto plano
+2. Si no encuentras valores: results = []
+3. Si no sabes un campo: usa null
+4. TODOS los textos en español
+5. NO uses comillas dobles dentro de las strings
+6. status solo puede ser: "normal", "high", "low", "critical"
 
-IMPORTANTE: 
-- SIEMPRE incluir simplified_explanation y clinical_interpretation
-- NUNCA usar comillas internas que rompan el JSON
-- Si hay valores críticos, incluir warning específico
-- Ser conservador: si hay duda, marcar como normal`;
+TIPOS DE ANÁLISIS A BUSCAR:
+- Hemograma: Glóbulos rojos, blancos, plaquetas, hemoglobina, hematocrito
+- Química: Glucosa, colesterol, triglicéridos, creatinina, urea
+- Tiroides: TSH, T3, T4
+- Hígado: Transaminasas (ALT, AST), bilirrubina
+- Coagulación: TP, KPTT, INR
+- Orina: Proteínas, glucosa, sangre, leucocitos
+- Y cualquier otro análisis médico
+
+SI EL FORMATO ES DESCONOCIDO:
+- results: []
+- summary: "Documento de análisis médico detectado. Formato no estándar impide extracción automática."
+- recommendations: ["Verifique el PDF manualmente", "Consulte con su médico"]
+
+RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
 
       const body = {
         contents: [{
@@ -341,7 +316,7 @@ IMPORTANTE:
               }
             }
           },
-          maxOutputTokens: 4000
+          maxOutputTokens: 8000
         }
       };
 
@@ -367,7 +342,11 @@ IMPORTANTE:
       }
 
       const raw = await resp.json();
+      console.log('🔍 Respuesta completa de la API:', raw);
+      
       const text = raw?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      console.log('📄 Texto extraído de la respuesta:', text);
+      console.log('📏 Longitud del texto:', text.length);
       
       // Limpiar el texto JSON para evitar errores de parsing
       let cleanText = text.trim();
@@ -380,19 +359,28 @@ IMPORTANTE:
         cleanText = cleanText.replace(/^```\s*/, '').replace(/\s*```$/, '');
       }
       
+      console.log('✨ Texto limpio para parsear:', cleanText);
+      console.log('🔤 Primeros 200 caracteres:', cleanText.substring(0, 200));
+      
       let result: AnalysisResult;
       
       try {
+        console.log('🔄 Intentando parsear JSON...');
         result = JSON.parse(cleanText) as AnalysisResult;
+        console.log('✅ JSON parseado exitosamente:', result);
         
         // Validar que el resultado tenga la estructura mínima esperada
         if (!result || typeof result !== 'object') {
+          console.error('❌ Resultado no es un objeto válido');
           throw new Error('Respuesta inválida de la IA');
         }
         
         if (!result.results || !Array.isArray(result.results)) {
+          console.error('❌ No hay array de resultados:', result.results);
           throw new Error('La respuesta no contiene resultados válidos');
         }
+        
+        console.log('📊 Cantidad de resultados encontrados:', result.results.length);
         
         // Asegurar valores por defecto para evitar errores
         result.patient_name = result.patient_name || 'No especificado';
@@ -418,26 +406,59 @@ IMPORTANTE:
         this.analysisResult.set(result);
         
       } catch (parseError: any) {
-        console.error('Error al parsear JSON:', parseError);
-        console.error('Texto recibido:', cleanText);
+        console.error('❌❌❌ ERROR AL PARSEAR JSON ❌❌❌');
+        console.error('Error:', parseError);
+        console.error('Mensaje:', parseError.message);
+        console.error('Stack:', parseError.stack);
+        console.error('📄 Texto que causó el error:', cleanText);
+        console.error('📏 Longitud del texto:', cleanText?.length || 0);
+        console.error('🔤 Primeros 500 caracteres:', cleanText?.substring(0, 500) || 'vacío');
         
-        // Si el JSON parsing falla, crear un resultado de fallback
+        // Intentar extraer información básica del texto sin estructura JSON
+        let partialData: any = {};
+        
+        try {
+          // Buscar patrones comunes en la respuesta de texto plano
+          const textLower = cleanText.toLowerCase();
+          
+          // Si la IA respondió en texto plano, intentar extraerlo
+          if (textLower.includes('paciente') || textLower.includes('laboratorio') || textLower.includes('análisis')) {
+            partialData = {
+              patient_name: this.extractPatternFromText(cleanText, /paciente[:\s]+([^\n]+)/i) || 'No especificado',
+              laboratory: this.extractPatternFromText(cleanText, /laboratorio[:\s]+([^\n]+)/i) || 'No especificado',
+              test_date: this.extractPatternFromText(cleanText, /fecha[:\s]+([^\n]+)/i) || '',
+              summary: 'El análisis fue procesado pero el formato del laboratorio es diferente al estándar. La información extraída puede ser limitada.',
+              results: [],
+              recommendations: [
+                'Este PDF tiene un formato no estándar',
+                'Recomendamos contactar al laboratorio para obtener el análisis en formato digital estándar',
+                'Consulte con su médico para la interpretación completa',
+                'Si necesita procesamiento urgente, puede intentar subir el análisis nuevamente'
+              ]
+            };
+          }
+        } catch (extractError) {
+          console.error('Error en extracción de texto:', extractError);
+        }
+        
+        // Crear resultado de fallback mejorado
         const fallbackResult: AnalysisResult = {
-          patient_name: 'Error en el procesamiento',
-          test_date: '',
-          laboratory: 'Formato no reconocido',
-          results: [],
-          summary: 'Hubo un problema al procesar el análisis. El formato del PDF de este laboratorio podría no ser completamente compatible con el sistema.',
-          recommendations: [
-            'Verifique que el PDF sea un análisis médico válido y de buena calidad',
-            'Intente con una versión más reciente del análisis',
-            'Contacte al laboratorio para obtener el análisis en formato digital',
-            'Consulte con su médico para la interpretación manual del análisis'
+          patient_name: partialData.patient_name || 'No especificado',
+          test_date: partialData.test_date || '',
+          laboratory: partialData.laboratory || 'Formato no reconocido completamente',
+          results: partialData.results || [],
+          summary: partialData.summary || 'El formato de este laboratorio tiene una estructura diferente al estándar. No pudimos extraer todos los valores automáticamente.',
+          recommendations: partialData.recommendations || [
+            '✓ El PDF es válido pero tiene un formato especial',
+            '⚠️ Algunos valores pueden no haberse detectado automáticamente',
+            '📋 Verifique manualmente los valores importantes en el PDF original',
+            '👨‍⚕️ Consulte con su médico para la interpretación completa',
+            '🔄 Si el laboratorio tiene versión digital actualizada, intente con esa'
           ]
         };
         
         this.analysisResult.set(fallbackResult);
-        this.error.set('El análisis se procesó parcialmente. El formato de este laboratorio podría requerir ajustes adicionales.');
+        this.error.set('⚠️ PDF procesado con limitaciones: El formato de este laboratorio requiere revisión manual. Verifique los valores importantes directamente en el PDF.');
       }
 
     } catch (e: any) {
