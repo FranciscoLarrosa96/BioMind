@@ -1,0 +1,250 @@
+<div class="min-h-screen bg-gradient-to-br from-cyan-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-cyan-900">
+  
+  <!-- Navigation -->
+  <nav class="container mx-auto px-4 py-6">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-2xl">🧬</span>
+        </div>
+        <span class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+          BioMind
+        </span>
+      </div>
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="container mx-auto px-4 py-20 md:py-32">
+    <div class="max-w-5xl mx-auto text-center" data-aos="fade-up">
+      
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-full text-cyan-700 dark:text-cyan-300 text-sm font-medium mb-8">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+        </span>
+        Proyecto de Portfolio - Desarrollado por Francisco Larrosa
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
+        Tus análisis médicos,
+        <span class="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+          explicados con IA
+        </span>
+      </h1>
+
+      <!-- Subheading -->
+      <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+        Plataforma innovadora que utiliza <strong>Inteligencia Artificial</strong> para transformar estudios médicos complejos en interpretaciones claras y accesibles.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        <button 
+          (click)="goToAnalysis()"
+          class="group px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2"
+        >
+          <span>Probar Ahora</span>
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </button>
+        <button 
+          (click)="scrollToFeatures()"
+          class="px-8 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-gray-700 transition-all duration-200 flex items-center gap-2"
+        >
+          <span>Ver Características</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tech Stack Pills -->
+      <div class="flex flex-wrap justify-center gap-3 mb-16">
+        @for (tech of techStack; track tech.name) {
+          <span class="px-4 py-2 bg-white dark:bg-gray-800 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-700" [class]="tech.color">
+            {{ tech.name }}
+          </span>
+        }
+      </div>
+
+      <!-- Demo Preview Image -->
+      <div class="relative max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+        <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 blur-3xl opacity-20 rounded-3xl"></div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-3">
+          <img 
+            src="assets/previa.png" 
+            alt="Vista previa de BioMind - Análisis médicos con IA" 
+            class="w-full h-auto rounded-xl shadow-lg"
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-white dark:bg-gray-800/50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          Características Destacadas
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Una solución completa que combina tecnología de punta con diseño intuitivo
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        @for (feature of features; track feature.title) {
+          <div 
+            class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:-translate-y-1"
+            [attr.data-aos]="'fade-up'"
+            [attr.data-aos-delay]="$index * 100"
+          >
+            <div class="text-5xl mb-4">{{ feature.icon }}</div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+              {{ feature.title }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+              {{ feature.description }}
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          ¿Cómo Funciona?
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Tres simples pasos para obtener tu análisis completo
+        </p>
+      </div>
+
+      <div class="max-w-5xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8 md:gap-4">
+          @for (step of steps; track step.number) {
+            <div class="relative" [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="$index * 150">
+              <!-- Connection Line (desktop only) -->
+              @if ($index < steps.length - 1) {
+                <div class="hidden md:block absolute top-16 left-1/2 w-full h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-30"></div>
+              }
+              
+              <div class="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border-2 border-transparent hover:border-cyan-500 dark:hover:border-cyan-600 transition-all duration-300">
+                <!-- Step Number -->
+                <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                  {{ step.number }}
+                </div>
+                
+                <div class="text-5xl mb-6 mt-2">{{ step.icon }}</div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                  {{ step.title }}
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {{ step.description }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Final CTA -->
+      <div class="text-center mt-16" data-aos="fade-up" data-aos-delay="400">
+        <button 
+          (click)="goToAnalysis()"
+          class="group px-10 py-5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl font-bold text-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-200 flex items-center gap-3 mx-auto"
+        >
+          <span>Comenzar Análisis</span>
+          <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 dark:bg-black text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8 mb-8">
+          
+          <!-- About -->
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <span class="text-2xl">🧬</span>
+              </div>
+              <span class="text-2xl font-bold">BioMind</span>
+            </div>
+            <p class="text-gray-400 leading-relaxed">
+              Plataforma de análisis médicos inteligentes desarrollada con tecnologías de última generación.
+            </p>
+          </div>
+
+          <!-- Tech Stack -->
+          <div>
+            <h4 class="font-bold text-lg mb-4">Tecnologías</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>• Angular 20 + Signals</li>
+              <li>• Google Gemini AI</li>
+              <li>• Tailwind CSS</li>
+              <li>• TypeScript</li>
+            </ul>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <h4 class="font-bold text-lg mb-4">Desarrollador</h4>
+            <p class="text-gray-400 mb-4">Francisco Larrosa</p>
+            <div class="flex gap-4">
+              <a href="https://github.com/FranciscoLarrosa96" target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-gray-800 hover:bg-cyan-600 rounded-lg flex items-center justify-center transition-colors duration-200">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+              <a href="https://linkedin.com/in/francisco-larrosa" target="_blank" rel="noopener noreferrer"
+                 class="w-10 h-10 bg-gray-800 hover:bg-cyan-600 rounded-lg flex items-center justify-center transition-colors duration-200">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
+              <a href="https://franciscolarrosa.dev" target="_blank" rel="noopener noreferrer"
+                 class="w-10 h-10 bg-gray-800 hover:bg-cyan-600 rounded-lg flex items-center justify-center transition-colors duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="border-t border-gray-800 pt-8">
+          <div class="bg-yellow-900/20 border border-yellow-700/50 rounded-lg p-4 mb-6">
+            <p class="text-sm text-yellow-200">
+              <strong>⚠️ Disclaimer Médico:</strong> Esta herramienta es solo para fines informativos y educativos. No reemplaza el consejo médico profesional. Siempre consulte con su médico para la interpretación de sus análisis.
+            </p>
+          </div>
+
+          <div class="text-center text-gray-500 text-sm">
+            <p>&copy; 2025 BioMind - Desarrollado por <a href="https://franciscolarrosa.dev" class="text-cyan-400 hover:text-cyan-300 transition-colors">Francisco Larrosa</a></p>
+            <p class="mt-2">Proyecto de Portfolio | Angular 20 + Google Gemini AI</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>

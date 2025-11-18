@@ -14,7 +14,7 @@ Una aplicación web inteligente que permite a los usuarios subir PDFs de anális
 
 ## 🚀 Tecnologías Utilizadas
 
-- **Angular 19**: Framework principal
+- **Angular 20**: Framework principal
 - **TypeScript**: Lenguaje de programación
 - **Tailwind CSS**: Estilos y diseño responsivo
 - **Gemini AI**: Análisis de documentos médicos

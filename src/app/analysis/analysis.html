@@ -2,23 +2,29 @@
 <div class="min-h-screen bg-gradient-to-br from-primary-50 to-white dark:from-gray-900 dark:to-gray-800">
   <div class="container mx-auto px-4 py-8">
     
-    <!-- Top Bar with Theme Toggle -->
-    <div class="flex justify-end mb-6" data-aos="fade-down">
+    <!-- Top Bar with Back Button and Theme Toggle -->
+    <div class="flex justify-between items-center mb-6" data-aos="fade-down">
+      <a routerLink="/" class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span class="font-medium">Volver al inicio</span>
+      </a>
       <app-theme-toggle></app-theme-toggle>
     </div>
 
     <!-- Hero Section -->
     <div class="text-center mb-12" data-aos="fade-up">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full mb-6">
-        <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-blue-600 rounded-2xl mb-6 shadow-lg">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
         </svg>
       </div>
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-        BioMind
+        Análisis Médico Inteligente
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-        Analiza tus estudios médicos de forma inteligente. Sube tu PDF y obtén explicaciones simples de cada valor.
+        Sube tu PDF de análisis médico y obtén interpretaciones claras en segundos. Potenciado por <strong>Google Gemini AI</strong>.
       </p>
     </div>
 

@@ -1,6 +1,7 @@
 import { Component, computed, signal, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { UtilService } from '../services/util';
 import { ThemeService } from '../services/theme.service';
 import { ThemeToggleComponent } from '../components/theme-toggle.component';
@@ -31,7 +32,7 @@ interface AnalysisItem {
 @Component({
   selector: 'app-analysis',
   standalone: true,
-  imports: [CommonModule, FormsModule, ThemeToggleComponent],
+  imports: [CommonModule, FormsModule, ThemeToggleComponent, RouterLink],
   templateUrl: './analysis.html',
   styleUrl: './analysis.scss'
 })
@@ -316,7 +317,7 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
               }
             }
           },
-          maxOutputTokens: 8000
+          maxOutputTokens: 10000
         }
       };
 
