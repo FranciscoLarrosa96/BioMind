@@ -34,7 +34,7 @@ interface AnalysisItem {
   standalone: true,
   imports: [CommonModule, FormsModule, ThemeToggleComponent, RouterLink],
   templateUrl: './analysis.html',
-  styleUrl: './analysis.scss'
+  styleUrl: './analysis.scss',
 })
 export class Analysis {
   utilService = inject(UtilService);
@@ -47,6 +47,8 @@ export class Analysis {
   isDragOver = signal<boolean>(false);
   showDetailedView = signal<boolean>(false);
   showOnlyAbnormal = signal<boolean>(false);
+  expandedItems = signal<Set<string>>(new Set());
+  compactView = signal<boolean>(true); // Vista compacta por defecto
 
   constructor() {
     // Effect para limpiar errores cuando se selecciona un nuevo archivo
@@ -66,7 +68,10 @@ export class Analysis {
         setTimeout(() => {
           const resultsSection = document.getElementById('results-section');
           if (resultsSection) {
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            resultsSection.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
           }
         }, 100);
       }
@@ -87,10 +92,12 @@ export class Analysis {
     if (!result) return null;
 
     const total = result.results.length;
-    const normal = result.results.filter(r => r.status === 'normal').length;
-    const high = result.results.filter(r => r.status === 'high').length;
-    const low = result.results.filter(r => r.status === 'low').length;
-    const critical = result.results.filter(r => r.status === 'critical').length;
+    const normal = result.results.filter((r) => r.status === 'normal').length;
+    const high = result.results.filter((r) => r.status === 'high').length;
+    const low = result.results.filter((r) => r.status === 'low').length;
+    const critical = result.results.filter(
+      (r) => r.status === 'critical'
+    ).length;
 
     return { total, normal, high, low, critical };
   });
@@ -105,16 +112,20 @@ export class Analysis {
   canAnalyze = computed(() => this.hasFile() && !this.isProcessing());
 
   // Computed para filtrar resultados por estado
-  normalResults = computed(() => 
-    this.analysisResult()?.results.filter(r => r.status === 'normal') || []
+  normalResults = computed(
+    () =>
+      this.analysisResult()?.results.filter((r) => r.status === 'normal') || []
   );
 
-  abnormalResults = computed(() => 
-    this.analysisResult()?.results.filter(r => r.status !== 'normal') || []
+  abnormalResults = computed(
+    () =>
+      this.analysisResult()?.results.filter((r) => r.status !== 'normal') || []
   );
 
-  criticalResults = computed(() => 
-    this.analysisResult()?.results.filter(r => r.status === 'critical') || []
+  criticalResults = computed(
+    () =>
+      this.analysisResult()?.results.filter((r) => r.status === 'critical') ||
+      []
   );
 
   // Computed para mensajes de estado
@@ -138,13 +149,13 @@ export class Analysis {
   visibleResults = computed(() => {
     const results = this.analysisResult()?.results || [];
     if (this.showOnlyAbnormal()) {
-      return results.filter(r => r.status !== 'normal');
+      return results.filter((r) => r.status !== 'normal');
     }
     return results;
   });
 
   // Computed para texto del botón de filtro
-  filterButtonText = computed(() => 
+  filterButtonText = computed(() =>
     this.showOnlyAbnormal() ? 'Mostrar todos' : 'Solo anormales'
   );
 
@@ -193,6 +204,23 @@ export class Analysis {
     this.analysisResult.set(null);
     this.error.set(null);
     this.showDetailedView.set(false);
+    this.expandedItems.set(new Set());
+    this.compactView.set(true);
+  }
+
+  toggleItem(testName: string) {
+    const current = this.expandedItems();
+    const newSet = new Set(current);
+    if (newSet.has(testName)) {
+      newSet.delete(testName);
+    } else {
+      newSet.add(testName);
+    }
+    this.expandedItems.set(newSet);
+  }
+
+  isExpanded(testName: string): boolean {
+    return this.expandedItems().has(testName);
   }
 
   // helper: leer el PDF como base64
@@ -277,48 +305,95 @@ SI EL FORMATO ES DESCONOCIDO:
 RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
 
       const body = {
-        contents: [{
-          parts: [
-            { inline_data: { mime_type: f.type || 'application/pdf', data: b64 } },
-            { text: prompt }
-          ]
-        }],
+        contents: [
+          {
+            parts: [
+              {
+                inline_data: {
+                  mime_type: f.type || 'application/pdf',
+                  data: b64,
+                },
+              },
+              { text: prompt },
+            ],
+          },
+        ],
         generationConfig: {
           responseMimeType: 'application/json',
           responseSchema: {
             type: 'OBJECT',
             required: ['patient_name', 'results', 'summary'],
             properties: {
-              patient_name: { type: 'STRING', description: 'Nombre del paciente' },
+              patient_name: {
+                type: 'STRING',
+                description: 'Nombre del paciente',
+              },
               test_date: { type: 'STRING', description: 'Fecha del análisis' },
-              laboratory: { type: 'STRING', description: 'Nombre del laboratorio' },
+              laboratory: {
+                type: 'STRING',
+                description: 'Nombre del laboratorio',
+              },
               results: {
                 type: 'ARRAY',
                 items: {
                   type: 'OBJECT',
-                  required: ['test_name', 'status', 'simplified_explanation', 'clinical_interpretation'],
+                  required: [
+                    'test_name',
+                    'status',
+                    'simplified_explanation',
+                    'clinical_interpretation',
+                  ],
                   properties: {
-                    test_name: { type: 'STRING', description: 'Nombre completo del análisis' },
-                    value: { type: 'STRING', description: 'Valor obtenido, null si no disponible' },
-                    unit: { type: 'STRING', description: 'Unidad de medida, null si no disponible' },
-                    reference_range: { type: 'STRING', description: 'Rango de referencia, null si no disponible' },
-                    status: { type: 'STRING', enum: ['normal', 'high', 'low', 'critical'], description: 'Estado del valor' },
-                    simplified_explanation: { type: 'STRING', description: 'Explicación simple de qué es este análisis' },
-                    clinical_interpretation: { type: 'STRING', description: 'Qué indican valores altos y bajos' },
-                    warning: { type: 'STRING', description: 'Advertencia específica para valores anormales, null si normal' }
-                  }
-                }
+                    test_name: {
+                      type: 'STRING',
+                      description: 'Nombre completo del análisis',
+                    },
+                    value: {
+                      type: 'STRING',
+                      description: 'Valor obtenido, null si no disponible',
+                    },
+                    unit: {
+                      type: 'STRING',
+                      description: 'Unidad de medida, null si no disponible',
+                    },
+                    reference_range: {
+                      type: 'STRING',
+                      description: 'Rango de referencia, null si no disponible',
+                    },
+                    status: {
+                      type: 'STRING',
+                      enum: ['normal', 'high', 'low', 'critical'],
+                      description: 'Estado del valor',
+                    },
+                    simplified_explanation: {
+                      type: 'STRING',
+                      description: 'Explicación simple de qué es este análisis',
+                    },
+                    clinical_interpretation: {
+                      type: 'STRING',
+                      description: 'Qué indican valores altos y bajos',
+                    },
+                    warning: {
+                      type: 'STRING',
+                      description:
+                        'Advertencia específica para valores anormales, null si normal',
+                    },
+                  },
+                },
               },
-              summary: { type: 'STRING', description: 'Resumen general del análisis' },
+              summary: {
+                type: 'STRING',
+                description: 'Resumen general del análisis',
+              },
               recommendations: {
                 type: 'ARRAY',
                 items: { type: 'STRING' },
-                description: 'Recomendaciones generales'
-              }
-            }
+                description: 'Recomendaciones generales',
+              },
+            },
           },
-          maxOutputTokens: 10000
-        }
+          maxOutputTokens: 10000,
+        },
       };
 
       // Crear un timeout para la petición
@@ -330,9 +405,9 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'gemini-2.5-flash-lite',
-          payload: body
+          payload: body,
         }),
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -344,14 +419,14 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
 
       const raw = await resp.json();
       console.log('🔍 Respuesta completa de la API:', raw);
-      
+
       const text = raw?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
       console.log('📄 Texto extraído de la respuesta:', text);
       console.log('📏 Longitud del texto:', text.length);
-      
+
       // Limpiar el texto JSON para evitar errores de parsing
       let cleanText = text.trim();
-      
+
       // Remover posibles marcadores de código si existen
       if (cleanText.startsWith('```json')) {
         cleanText = cleanText.replace(/^```json\s*/, '').replace(/\s*```$/, '');
@@ -359,53 +434,67 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
       if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/^```\s*/, '').replace(/\s*```$/, '');
       }
-      
+
       console.log('✨ Texto limpio para parsear:', cleanText);
       console.log('🔤 Primeros 200 caracteres:', cleanText.substring(0, 200));
-      
+
       let result: AnalysisResult;
-      
+
       try {
         console.log('🔄 Intentando parsear JSON...');
         result = JSON.parse(cleanText) as AnalysisResult;
         console.log('✅ JSON parseado exitosamente:', result);
-        
+
         // Validar que el resultado tenga la estructura mínima esperada
         if (!result || typeof result !== 'object') {
           console.error('❌ Resultado no es un objeto válido');
           throw new Error('Respuesta inválida de la IA');
         }
-        
+
         if (!result.results || !Array.isArray(result.results)) {
           console.error('❌ No hay array de resultados:', result.results);
           throw new Error('La respuesta no contiene resultados válidos');
         }
-        
-        console.log('📊 Cantidad de resultados encontrados:', result.results.length);
-        
+
+        console.log(
+          '📊 Cantidad de resultados encontrados:',
+          result.results.length
+        );
+
         // Asegurar valores por defecto para evitar errores
         result.patient_name = result.patient_name || 'No especificado';
         result.test_date = result.test_date || '';
         result.laboratory = result.laboratory || '';
         result.summary = result.summary || 'Análisis procesado correctamente';
-        result.recommendations = result.recommendations || ['Consulte con su médico para la interpretación completa'];
-        
+        result.recommendations = result.recommendations || [
+          'Consulte con su médico para la interpretación completa',
+        ];
+
         // Validar cada resultado
-        result.results = result.results.map(item => ({
+        result.results = result.results.map((item) => ({
           test_name: item.test_name || 'Sin nombre',
           value: item.value || null,
           unit: item.unit || null,
           reference_range: item.reference_range || null,
-          status: ['normal', 'high', 'low', 'critical'].includes(item.status) ? item.status : 'normal',
-          simplified_explanation: item.simplified_explanation || item['explanation'] || 'Análisis médico de laboratorio',
-          clinical_interpretation: item.clinical_interpretation || 'Los valores de este análisis pueden variar según múltiples factores. Consulte con su médico.',
+          status: ['normal', 'high', 'low', 'critical'].includes(item.status)
+            ? item.status
+            : 'normal',
+          simplified_explanation:
+            item.simplified_explanation ||
+            item['explanation'] ||
+            'Análisis médico de laboratorio',
+          clinical_interpretation:
+            item.clinical_interpretation ||
+            'Los valores de este análisis pueden variar según múltiples factores. Consulte con su médico.',
           warning: item.warning || null,
           // Mantener compatibilidad
-          explanation: item['explanation'] || item.simplified_explanation || 'Análisis médico'
+          explanation:
+            item['explanation'] ||
+            item.simplified_explanation ||
+            'Análisis médico',
         }));
-        
+
         this.analysisResult.set(result);
-        
       } catch (parseError: any) {
         console.error('❌❌❌ ERROR AL PARSEAR JSON ❌❌❌');
         console.error('Error:', parseError);
@@ -413,76 +502,110 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
         console.error('Stack:', parseError.stack);
         console.error('📄 Texto que causó el error:', cleanText);
         console.error('📏 Longitud del texto:', cleanText?.length || 0);
-        console.error('🔤 Primeros 500 caracteres:', cleanText?.substring(0, 500) || 'vacío');
-        
+        console.error(
+          '🔤 Primeros 500 caracteres:',
+          cleanText?.substring(0, 500) || 'vacío'
+        );
+
         // Intentar extraer información básica del texto sin estructura JSON
         let partialData: any = {};
-        
+
         try {
           // Buscar patrones comunes en la respuesta de texto plano
           const textLower = cleanText.toLowerCase();
-          
+
           // Si la IA respondió en texto plano, intentar extraerlo
-          if (textLower.includes('paciente') || textLower.includes('laboratorio') || textLower.includes('análisis')) {
+          if (
+            textLower.includes('paciente') ||
+            textLower.includes('laboratorio') ||
+            textLower.includes('análisis')
+          ) {
             partialData = {
-              patient_name: this.extractPatternFromText(cleanText, /paciente[:\s]+([^\n]+)/i) || 'No especificado',
-              laboratory: this.extractPatternFromText(cleanText, /laboratorio[:\s]+([^\n]+)/i) || 'No especificado',
-              test_date: this.extractPatternFromText(cleanText, /fecha[:\s]+([^\n]+)/i) || '',
-              summary: 'El análisis fue procesado pero el formato del laboratorio es diferente al estándar. La información extraída puede ser limitada.',
+              patient_name:
+                this.extractPatternFromText(
+                  cleanText,
+                  /paciente[:\s]+([^\n]+)/i
+                ) || 'No especificado',
+              laboratory:
+                this.extractPatternFromText(
+                  cleanText,
+                  /laboratorio[:\s]+([^\n]+)/i
+                ) || 'No especificado',
+              test_date:
+                this.extractPatternFromText(
+                  cleanText,
+                  /fecha[:\s]+([^\n]+)/i
+                ) || '',
+              summary:
+                'El análisis fue procesado pero el formato del laboratorio es diferente al estándar. La información extraída puede ser limitada.',
               results: [],
               recommendations: [
                 'Este PDF tiene un formato no estándar',
                 'Recomendamos contactar al laboratorio para obtener el análisis en formato digital estándar',
                 'Consulte con su médico para la interpretación completa',
-                'Si necesita procesamiento urgente, puede intentar subir el análisis nuevamente'
-              ]
+                'Si necesita procesamiento urgente, puede intentar subir el análisis nuevamente',
+              ],
             };
           }
         } catch (extractError) {
           console.error('Error en extracción de texto:', extractError);
         }
-        
+
         // Crear resultado de fallback mejorado
         const fallbackResult: AnalysisResult = {
           patient_name: partialData.patient_name || 'No especificado',
           test_date: partialData.test_date || '',
-          laboratory: partialData.laboratory || 'Formato no reconocido completamente',
+          laboratory:
+            partialData.laboratory || 'Formato no reconocido completamente',
           results: partialData.results || [],
-          summary: partialData.summary || 'El formato de este laboratorio tiene una estructura diferente al estándar. No pudimos extraer todos los valores automáticamente.',
+          summary:
+            partialData.summary ||
+            'El formato de este laboratorio tiene una estructura diferente al estándar. No pudimos extraer todos los valores automáticamente.',
           recommendations: partialData.recommendations || [
             '✓ El PDF es válido pero tiene un formato especial',
             '⚠️ Algunos valores pueden no haberse detectado automáticamente',
             '📋 Verifique manualmente los valores importantes en el PDF original',
             '👨‍⚕️ Consulte con su médico para la interpretación completa',
-            '🔄 Si el laboratorio tiene versión digital actualizada, intente con esa'
-          ]
+            '🔄 Si el laboratorio tiene versión digital actualizada, intente con esa',
+          ],
         };
-        
-        this.analysisResult.set(fallbackResult);
-        this.error.set('⚠️ PDF procesado con limitaciones: El formato de este laboratorio requiere revisión manual. Verifique los valores importantes directamente en el PDF.');
-      }
 
+        this.analysisResult.set(fallbackResult);
+        this.error.set(
+          '⚠️ PDF procesado con limitaciones: El formato de este laboratorio requiere revisión manual. Verifique los valores importantes directamente en el PDF.'
+        );
+      }
     } catch (e: any) {
       console.error('Error completo en análisis:', e);
-      
+
       let errorMessage = 'No se pudo analizar el PDF.';
-      
+
       if (e.name === 'AbortError') {
-        errorMessage = 'El análisis tardó demasiado tiempo. El PDF podría ser muy grande o complejo.';
-      } else if (e.message?.includes('Failed to fetch') || e.message?.includes('NetworkError')) {
-        errorMessage = 'Error de conexión. Verifique su conexión a internet y que el servidor esté funcionando.';
+        errorMessage =
+          'El análisis tardó demasiado tiempo. El PDF podría ser muy grande o complejo.';
+      } else if (
+        e.message?.includes('Failed to fetch') ||
+        e.message?.includes('NetworkError')
+      ) {
+        errorMessage =
+          'Error de conexión. Verifique su conexión a internet y que el servidor esté funcionando.';
       } else if (e.message?.includes('JSON')) {
-        errorMessage = 'Error al procesar la respuesta del análisis. Intente nuevamente.';
+        errorMessage =
+          'Error al procesar la respuesta del análisis. Intente nuevamente.';
       } else if (e.message?.includes('HTTP 400')) {
-        errorMessage = 'El PDF no pudo ser procesado. Verifique que sea un análisis médico válido y no esté dañado.';
+        errorMessage =
+          'El PDF no pudo ser procesado. Verifique que sea un análisis médico válido y no esté dañado.';
       } else if (e.message?.includes('HTTP 429')) {
-        errorMessage = 'Demasiadas solicitudes. Espere unos minutos antes de intentar nuevamente.';
+        errorMessage =
+          'Demasiadas solicitudes. Espere unos minutos antes de intentar nuevamente.';
       } else if (e.message?.includes('HTTP 500')) {
-        errorMessage = 'Error temporal del servidor. Intente nuevamente en unos minutos.';
+        errorMessage =
+          'Error temporal del servidor. Intente nuevamente en unos minutos.';
       } else if (e.message?.includes('HTTP 503')) {
-        errorMessage = 'El servicio está temporalmente no disponible. Intente más tarde.';
+        errorMessage =
+          'El servicio está temporalmente no disponible. Intente más tarde.';
       }
-      
+
       this.error.set(errorMessage);
     } finally {
       this.isProcessing.set(false);
@@ -491,37 +614,52 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
 
   getStatusColor(status: string): string {
     switch (status) {
-      case 'normal': return 'text-green-600 bg-green-50 border-green-200';
-      case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'normal':
+        return 'text-green-600 bg-green-50 border-green-200';
+      case 'high':
+        return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'low':
+        return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'critical':
+        return 'text-red-600 bg-red-50 border-red-200';
+      default:
+        return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   }
 
   getStatusIcon(status: string): string {
     switch (status) {
-      case 'normal': return '✓';
-      case 'high': return '↑';
-      case 'low': return '↓';
-      case 'critical': return '⚠';
-      default: return '?';
+      case 'normal':
+        return '✓';
+      case 'high':
+        return '↑';
+      case 'low':
+        return '↓';
+      case 'critical':
+        return '⚠';
+      default:
+        return '?';
     }
   }
 
   getStatusText(status: string): string {
     switch (status) {
-      case 'normal': return 'Normal';
-      case 'high': return 'Alto';
-      case 'low': return 'Bajo';
-      case 'critical': return 'Crítico';
-      default: return 'Sin datos';
+      case 'normal':
+        return 'Normal';
+      case 'high':
+        return 'Alto';
+      case 'low':
+        return 'Bajo';
+      case 'critical':
+        return 'Crítico';
+      default:
+        return 'Sin datos';
     }
   }
 
   getHighValueConditions(testName: string): string {
     const name = testName.toLowerCase();
-    
+
     if (name.includes('glucosa') || name.includes('glucose')) {
       return '• Diabetes mellitus • Resistencia a la insulina • Síndrome metabólico • Estrés • Medicamentos corticosteroides • Pancreatitis';
     }
@@ -540,16 +678,30 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
     if (name.includes('ácido úrico') || name.includes('uric acid')) {
       return '• Gota • Hiperuricemia • Síndrome metabólico • Insuficiencia renal • Dieta rica en purinas • Alcoholismo';
     }
-    if (name.includes('transaminasas') || name.includes('alt') || name.includes('ast') || name.includes('got') || name.includes('gpt')) {
+    if (
+      name.includes('transaminasas') ||
+      name.includes('alt') ||
+      name.includes('ast') ||
+      name.includes('got') ||
+      name.includes('gpt')
+    ) {
       return '• Hepatitis • Daño hepático • Esteatosis hepática • Cirrosis • Medicamentos hepatotóxicos • Alcoholismo • Infecciones virales';
     }
     if (name.includes('bilirrubina') || name.includes('bilirubin')) {
       return '• Ictericia • Hepatitis • Obstrucción biliar • Anemia hemolítica • Síndrome de Gilbert • Cirrosis';
     }
-    if (name.includes('hemoglobina') || name.includes('hgb') || name.includes('hb')) {
+    if (
+      name.includes('hemoglobina') ||
+      name.includes('hgb') ||
+      name.includes('hb')
+    ) {
       return '• Policitemia • Deshidratación • Enfermedad pulmonar crónica • Tabaquismo • Altitud elevada • Tumores productores de eritropoyetina';
     }
-    if (name.includes('leucocitos') || name.includes('glóbulos blancos') || name.includes('wbc')) {
+    if (
+      name.includes('leucocitos') ||
+      name.includes('glóbulos blancos') ||
+      name.includes('wbc')
+    ) {
       return '• Infección bacteriana • Leucemia • Estrés físico/emocional • Medicamentos • Inflamación • Necrosis tisular';
     }
     if (name.includes('neutrófilos') || name.includes('neutrophils')) {
@@ -561,11 +713,15 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
 
   getLowValueConditions(testName: string): string {
     const name = testName.toLowerCase();
-    
+
     if (name.includes('glucosa') || name.includes('glucose')) {
       return '• Hipoglucemia • Ayuno prolongado • Medicamentos hipoglucemiantes • Insulinoma • Enfermedad hepática • Insuficiencia suprarrenal';
     }
-    if (name.includes('hemoglobina') || name.includes('hgb') || name.includes('hb')) {
+    if (
+      name.includes('hemoglobina') ||
+      name.includes('hgb') ||
+      name.includes('hb')
+    ) {
       return '• Anemia ferropénica • Anemia crónica • Pérdida de sangre • Deficiencia nutricional • Enfermedad renal crónica • Talasemia';
     }
     if (name.includes('hematocrito') || name.includes('hct')) {
@@ -574,7 +730,11 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
     if (name.includes('hierro') || name.includes('iron')) {
       return '• Anemia ferropénica • Deficiencia dietética • Pérdida de sangre crónica • Malabsorción • Embarazo • Donación frecuente de sangre';
     }
-    if (name.includes('leucocitos') || name.includes('glóbulos blancos') || name.includes('wbc')) {
+    if (
+      name.includes('leucocitos') ||
+      name.includes('glóbulos blancos') ||
+      name.includes('wbc')
+    ) {
       return '• Infección viral • Medicamentos • Quimioterapia • Enfermedades autoinmunes • Déficit inmunitario • Radiación';
     }
     if (name.includes('plaquetas') || name.includes('platelets')) {
@@ -595,7 +755,7 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
 
   getCriticalValueConditions(testName: string): string {
     const name = testName.toLowerCase();
-    
+
     if (name.includes('glucosa') || name.includes('glucose')) {
       return '• Crisis diabética (hiperglucemia severa) • Cetoacidosis diabética • Estado hiperosmolar • Hipoglucemia severa • Shock • Coma';
     }
@@ -605,10 +765,18 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
     if (name.includes('potasio') || name.includes('potassium')) {
       return '• Arritmias cardíacas peligrosas • Hiperpotasemia/hipopotasemia severa • Paro cardíaco • Parálisis muscular • Insuficiencia renal';
     }
-    if (name.includes('hemoglobina') || name.includes('hgb') || name.includes('hb')) {
+    if (
+      name.includes('hemoglobina') ||
+      name.includes('hgb') ||
+      name.includes('hb')
+    ) {
       return '• Anemia severa • Hemorragia aguda • Shock hipovolémico • Insuficiencia cardíaca • Necesidad de transfusión urgente';
     }
-    if (name.includes('leucocitos') || name.includes('glóbulos blancos') || name.includes('wbc')) {
+    if (
+      name.includes('leucocitos') ||
+      name.includes('glóbulos blancos') ||
+      name.includes('wbc')
+    ) {
       return '• Sepsis • Leucemia aguda • Neutropenia severa • Infección sistémica grave • Shock séptico • Inmunosupresión crítica';
     }
     if (name.includes('plaquetas') || name.includes('platelets')) {
