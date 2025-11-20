@@ -1,96 +1,194 @@
 <!-- Header Section -->
-<div class="min-h-screen bg-gradient-to-br from-primary-50 to-white dark:from-gray-900 dark:to-gray-800">
+<div
+  class="min-h-screen bg-gradient-to-br from-primary-50 to-white dark:from-gray-900 dark:to-gray-800"
+>
   <div class="container mx-auto px-4 py-8">
-    
     <!-- Top Bar with Back Button and Theme Toggle -->
     <div class="flex justify-between items-center mb-6" data-aos="fade-down">
-      <a routerLink="/" class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        aria-label="Volver a la página principal"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          ></path>
         </svg>
         <span class="font-medium">Volver al inicio</span>
       </a>
       <app-theme-toggle></app-theme-toggle>
     </div>
 
-    <!-- Hero Section -->
-    <div class="text-center mb-12" data-aos="fade-up">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-blue-600 rounded-2xl mb-6 shadow-lg">
-        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
+    <main>
+      <!-- Hero Section -->
+      <div class="text-center mb-12" data-aos="fade-up">
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-blue-600 rounded-2xl mb-6 shadow-lg"
+        >
+          <svg
+            class="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+        </div>
+        <h1
+          class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+        >
+          Análisis Médico Inteligente
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Sube tu PDF de análisis médico y obtén interpretaciones claras en
+          segundos. Potenciado por <strong>Google Gemini AI</strong>.
+        </p>
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-        Análisis Médico Inteligente
-      </h1>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-        Sube tu PDF de análisis médico y obtén interpretaciones claras en segundos. Potenciado por <strong>Google Gemini AI</strong>.
-      </p>
-    </div>
 
-    <!-- Upload Section -->
-    <div class="max-w-4xl mx-auto">
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-8 mb-8" data-aos="fade-up" data-aos-delay="100">
-        
-        <!-- File Upload Area -->
-        @if (!file()) {
-          <div 
+      <!-- Upload Section -->
+      <div class="max-w-4xl mx-auto">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-8 mb-8"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <!-- File Upload Area -->
+          @if (!file()) {
+          <div
             class="border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300"
-            [class]="isDragOver() ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-300 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500'"
+            [class]="
+              isDragOver()
+                ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20'
+                : 'border-gray-300 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500'
+            "
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
             (drop)="onDrop($event)"
           >
             <div class="flex flex-col items-center">
-              <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mb-4">
-                <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              <div
+                class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mb-4"
+              >
+                <svg
+                  class="w-8 h-8 text-primary-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
                 </svg>
               </div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
+              >
                 Arrastra tu análisis médico aquí
               </h3>
               <p class="text-gray-500 dark:text-gray-400 mb-4">
                 O haz clic para seleccionar un archivo PDF
               </p>
-              <label class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg cursor-pointer transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              <label
+                class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg cursor-pointer transition-colors duration-200"
+              >
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                  ></path>
                 </svg>
                 Seleccionar archivo
-                <input type="file" class="hidden" accept=".pdf" (change)="onPick($event)">
+                <input
+                  type="file"
+                  class="hidden"
+                  accept=".pdf"
+                  (change)="onPick($event)"
+                  aria-label="Seleccionar archivo PDF de análisis médico"
+                />
               </label>
-              <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">
+              <p class="text-sm text-gray-700 dark:text-gray-400 mt-2">
                 Solo archivos PDF (máx. 10MB)
               </p>
             </div>
           </div>
-        }
+          }
 
-        <!-- File Selected -->
-        @if (file()) {
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6" data-aos="fade-in">
+          <!-- File Selected -->
+          @if (file()) {
+          <div
+            class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6"
+            data-aos="fade-in"
+          >
             <div class="flex items-center justify-between">
               <div class="flex items-center">
-                <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mr-4">
-                  <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                <div
+                  class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mr-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
                   </svg>
                 </div>
                 <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white">{{ file()?.name }}</h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <h4 class="font-medium text-gray-900 dark:text-white">
+                    {{ file()?.name }}
+                  </h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
                     {{ (file()?.size! / 1024 / 1024).toFixed(2) }} MB
                   </p>
                 </div>
               </div>
-              <button 
+              <button
                 (click)="limpiar()"
                 class="text-gray-400 hover:text-red-500 transition-colors duration-200"
+                aria-label="Eliminar archivo seleccionado"
                 title="Eliminar archivo"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
                 </svg>
               </button>
             </div>
@@ -99,405 +197,765 @@
           <!-- Analyze Button -->
           <div class="text-center">
             <!-- Status Message -->
-            <p class="mb-4 text-sm font-medium transition-all duration-300" [ngClass]="statusColor()">
+            <p
+              class="mb-4 text-sm font-medium transition-all duration-300"
+              [ngClass]="statusColor()"
+            >
               {{ statusMessage() }}
             </p>
-            
-            <button 
+
+            <button
               (click)="analyzeWithAI()"
               [disabled]="!canAnalyze()"
               class="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed transform hover:scale-105 disabled:hover:scale-100"
             >
               @if (isProcessing()) {
-                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                Analizando...
-              } @else {
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                </svg>
-                Analizar con IA
-              }
+              <div
+                class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"
+              ></div>
+              Analizando... } @else {
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
+              </svg>
+              Analizar con IA }
             </button>
           </div>
-        }
+          }
 
-        <!-- Error/Warning Message -->
-        @if (error()) {
-          <div class="mt-6 p-5 rounded-xl border-l-4" 
-               [ngClass]="error()?.includes('⚠️') ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-700' : 'bg-red-50 dark:bg-red-900/20 border-red-500 dark:border-red-800'"
-               data-aos="fade-in">
+          <!-- Error/Warning Message -->
+          @if (error()) {
+          <div
+            class="mt-6 p-5 rounded-xl border-l-4"
+            [ngClass]="
+              error()?.includes('⚠️')
+                ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-700'
+                : 'bg-red-50 dark:bg-red-900/20 border-red-500 dark:border-red-800'
+            "
+            data-aos="fade-in"
+          >
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 @if (error()?.includes('⚠️')) {
-                  <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                  </svg>
+                <svg
+                  class="w-6 h-6 text-yellow-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  ></path>
+                </svg>
                 } @else {
-                  <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
+                <svg
+                  class="w-6 h-6 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
                 }
               </div>
               <div class="ml-3 flex-1">
-                <h3 class="font-semibold mb-1"
-                    [ngClass]="error()?.includes('⚠️') ? 'text-yellow-800 dark:text-yellow-200' : 'text-red-800 dark:text-red-200'">
-                  {{ error()?.includes('⚠️') ? 'Información Importante' : 'Error en el Procesamiento' }}
+                <h3
+                  class="font-semibold mb-1"
+                  [ngClass]="
+                    error()?.includes('⚠️')
+                      ? 'text-yellow-800 dark:text-yellow-200'
+                      : 'text-red-800 dark:text-red-200'
+                  "
+                >
+                  {{
+                    error()?.includes("⚠️")
+                      ? "Información Importante"
+                      : "Error en el Procesamiento"
+                  }}
                 </h3>
-                <p class="text-sm whitespace-pre-line"
-                   [ngClass]="error()?.includes('⚠️') ? 'text-yellow-700 dark:text-yellow-300' : 'text-red-700 dark:text-red-300'">
+                <p
+                  class="text-sm whitespace-pre-line"
+                  [ngClass]="
+                    error()?.includes('⚠️')
+                      ? 'text-yellow-700 dark:text-yellow-300'
+                      : 'text-red-700 dark:text-red-300'
+                  "
+                >
                   {{ error() }}
                 </p>
               </div>
             </div>
           </div>
-        }
-      </div>
+          }
+        </div>
 
-      <!-- Results Section -->
-      @if (analysisResult()) {
-        <div class="space-y-8" data-aos="fade-up" data-aos-delay="200" id="results-section">
-          
+        <!-- Results Section -->
+        @if (analysisResult()) {
+        <div
+          class="space-y-8"
+          data-aos="fade-up"
+          data-aos-delay="200"
+          id="results-section"
+        >
           <!-- Quick Stats Cards -->
           @if (stats()) {
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-              <!-- Total -->
-              <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105">
-                <div class="text-3xl font-bold">{{ stats()?.total }}</div>
-                <div class="text-sm opacity-90">Total</div>
-              </div>
-              <!-- Normal -->
-              <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105">
-                <div class="text-3xl font-bold">{{ stats()?.normal }}</div>
-                <div class="text-sm opacity-90">Normales</div>
-              </div>
-              <!-- High -->
-              <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105">
-                <div class="text-3xl font-bold">{{ stats()?.high }}</div>
-                <div class="text-sm opacity-90">Altos</div>
-              </div>
-              <!-- Low -->
-              <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105">
-                <div class="text-3xl font-bold">{{ stats()?.low }}</div>
-                <div class="text-sm opacity-90">Bajos</div>
-              </div>
-              <!-- Critical -->
-              <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105">
-                <div class="text-3xl font-bold">{{ stats()?.critical }}</div>
-                <div class="text-sm opacity-90">Críticos</div>
-              </div>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <!-- Total -->
+            <div
+              class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
+            >
+              <div class="text-3xl font-bold">{{ stats()?.total }}</div>
+              <div class="text-sm opacity-90">Total</div>
             </div>
+            <!-- Normal -->
+            <div
+              class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
+            >
+              <div class="text-3xl font-bold">{{ stats()?.normal }}</div>
+              <div class="text-sm opacity-90">Normales</div>
+            </div>
+            <!-- High -->
+            <div
+              class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
+            >
+              <div class="text-3xl font-bold">{{ stats()?.high }}</div>
+              <div class="text-sm opacity-90">Altos</div>
+            </div>
+            <!-- Low -->
+            <div
+              class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
+            >
+              <div class="text-3xl font-bold">{{ stats()?.low }}</div>
+              <div class="text-sm opacity-90">Bajos</div>
+            </div>
+            <!-- Critical -->
+            <div
+              class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
+            >
+              <div class="text-3xl font-bold">{{ stats()?.critical }}</div>
+              <div class="text-sm opacity-90">Críticos</div>
+            </div>
+          </div>
           }
-          
+
           <!-- Patient Info -->
           <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
             <!-- Warning if no results detected -->
             @if (analysisResult() && analysisResult()!.results.length === 0) {
-              <div class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-r-lg">
-                <div class="flex items-start">
-                  <svg class="w-6 h-6 text-yellow-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                  </svg>
-                  <div>
-                    <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-                      Formato de Laboratorio No Estándar
-                    </h4>
-                    <p class="text-sm text-yellow-700 dark:text-yellow-300 mb-2">
-                      No se pudieron extraer valores individuales automáticamente de este PDF. Esto no significa que haya un error, sino que el formato específico de este laboratorio es diferente.
-                    </p>
-                    <p class="text-xs text-yellow-600 dark:text-yellow-400">
-                      💡 <strong>Recomendación:</strong> Revise el PDF original manualmente o solicite al laboratorio un formato digital actualizado.
-                    </p>
-                  </div>
+            <div
+              class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-r-lg"
+            >
+              <div class="flex items-start">
+                <svg
+                  class="w-6 h-6 text-yellow-600 mr-3 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  ></path>
+                </svg>
+                <div>
+                  <h4
+                    class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2"
+                  >
+                    Formato de Laboratorio No Estándar
+                  </h4>
+                  <p class="text-sm text-yellow-700 dark:text-yellow-300 mb-2">
+                    No se pudieron extraer valores individuales automáticamente
+                    de este PDF. Esto no significa que haya un error, sino que
+                    el formato específico de este laboratorio es diferente.
+                  </p>
+                  <p class="text-xs text-yellow-600 dark:text-yellow-400">
+                    💡 <strong>Recomendación:</strong> Revise el PDF original
+                    manualmente o solicite al laboratorio un formato digital
+                    actualizado.
+                  </p>
                 </div>
               </div>
+            </div>
             }
-            
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-              <svg class="w-6 h-6 mr-3 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+
+            <h2
+              class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
+            >
+              <svg
+                class="w-6 h-6 mr-3 text-primary-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                ></path>
               </svg>
               Información del Análisis
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Paciente</p>
-                <p class="font-semibold text-gray-900 dark:text-white">{{ analysisResult()?.patient_name || 'No especificado' }}</p>
+                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                  Paciente
+                </p>
+                <p class="font-semibold text-gray-900 dark:text-white">
+                  {{ analysisResult()?.patient_name || "No especificado" }}
+                </p>
               </div>
               <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Fecha</p>
-                <p class="font-semibold text-gray-900 dark:text-white">{{ utilService.formatDate(analysisResult()?.test_date || '') || 'No especificada' }}</p>
+                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                  Fecha
+                </p>
+                <p class="font-semibold text-gray-900 dark:text-white">
+                  {{
+                    utilService.formatDate(analysisResult()?.test_date || "") ||
+                      "No especificada"
+                  }}
+                </p>
               </div>
               <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Laboratorio</p>
-                <p class="font-semibold text-gray-900 dark:text-white">{{ analysisResult()?.laboratory || 'No especificado' }}</p>
+                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                  Laboratorio
+                </p>
+                <p class="font-semibold text-gray-900 dark:text-white">
+                  {{ analysisResult()?.laboratory || "No especificado" }}
+                </p>
               </div>
               <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Total Estudios</p>
-                <p class="font-semibold text-gray-900 dark:text-white">{{ analysisResult()?.results?.length || 0 }}</p>
+                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                  Total Estudios
+                </p>
+                <p class="font-semibold text-gray-900 dark:text-white">
+                  {{ analysisResult()?.results?.length || 0 }}
+                </p>
               </div>
             </div>
           </div>
 
           <!-- Statistics -->
           @if (stats()) {
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Resumen de Resultados</h3>
-              <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ stats()?.total }}</div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400">Total</div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">
+              Resumen de Resultados
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div
+                class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
+                <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                  {{ stats()?.total }}
                 </div>
-                <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div class="text-2xl font-bold text-green-600">{{ stats()?.normal }}</div>
-                  <div class="text-sm text-green-600">Normales</div>
-                </div>
-                <div class="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                  <div class="text-2xl font-bold text-orange-600">{{ stats()?.high }}</div>
-                  <div class="text-sm text-orange-600">Altos</div>
-                </div>
-                <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div class="text-2xl font-bold text-blue-600">{{ stats()?.low }}</div>
-                  <div class="text-sm text-blue-600">Bajos</div>
-                </div>
-                <div class="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                  <div class="text-2xl font-bold text-red-600">{{ stats()?.critical }}</div>
-                  <div class="text-sm text-red-600">Críticos</div>
+                <div class="text-sm text-gray-700 dark:text-gray-300">
+                  Total
                 </div>
               </div>
+              <div
+                class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"
+              >
+                <div class="text-2xl font-bold text-green-600">
+                  {{ stats()?.normal }}
+                </div>
+                <div class="text-sm text-green-600">Normales</div>
+              </div>
+              <div
+                class="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg"
+              >
+                <div class="text-2xl font-bold text-orange-600">
+                  {{ stats()?.high }}
+                </div>
+                <div class="text-sm text-orange-600">Altos</div>
+              </div>
+              <div
+                class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+              >
+                <div class="text-2xl font-bold text-blue-600">
+                  {{ stats()?.low }}
+                </div>
+                <div class="text-sm text-blue-600">Bajos</div>
+              </div>
+              <div
+                class="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg"
+              >
+                <div class="text-2xl font-bold text-red-600">
+                  {{ stats()?.critical }}
+                </div>
+                <div class="text-sm text-red-600">Críticos</div>
+              </div>
             </div>
+          </div>
           }
 
           <!-- Summary -->
           <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Resumen General</h3>
-            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
-              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ analysisResult()?.summary }}</p>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              Resumen General
+            </h3>
+            <div
+              class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500"
+            >
+              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {{ analysisResult()?.summary }}
+              </p>
             </div>
           </div>
 
           <!-- View Toggle and Filter -->
           <div class="flex flex-wrap gap-4 justify-center mb-6">
-            <button 
+            <button
               (click)="compactView.set(!compactView())"
               class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              [attr.aria-label]="
+                compactView()
+                  ? 'Cambiar a vista detallada'
+                  : 'Cambiar a vista compacta'
+              "
             >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
               </svg>
-              {{ compactView() ? 'Vista Detallada' : 'Vista Compacta' }}
+              {{ compactView() ? "Vista Detallada" : "Vista Compacta" }}
             </button>
 
             @if (abnormalResults().length > 0) {
-              <button 
-                (click)="showOnlyAbnormal.set(!showOnlyAbnormal())"
-                class="inline-flex items-center px-6 py-3 transition-all duration-200 transform hover:scale-105 rounded-xl font-semibold shadow-lg hover:shadow-xl"
-                [ngClass]="showOnlyAbnormal() ? 'bg-orange-600 hover:bg-orange-700 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200'"
+            <button
+              (click)="showOnlyAbnormal.set(!showOnlyAbnormal())"
+              class="inline-flex items-center px-6 py-3 transition-all duration-200 transform hover:scale-105 rounded-xl font-semibold shadow-lg hover:shadow-xl"
+              [ngClass]="
+                showOnlyAbnormal()
+                  ? 'bg-orange-600 hover:bg-orange-700 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200'
+              "
+              [attr.aria-label]="
+                showOnlyAbnormal()
+                  ? 'Mostrar todos los resultados'
+                  : 'Mostrar solo resultados anormales'
+              "
+              [attr.aria-pressed]="showOnlyAbnormal()"
+            >
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                </svg>
-                {{ filterButtonText() }}
-                <span class="ml-2 px-2 py-1 bg-white/20 rounded-full text-xs">
-                  {{ showOnlyAbnormal() ? abnormalResults().length : analysisResult()?.results?.length }}
-                </span>
-              </button>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                ></path>
+              </svg>
+              {{ filterButtonText() }}
+              <span class="ml-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+                {{
+                  showOnlyAbnormal()
+                    ? abnormalResults().length
+                    : analysisResult()?.results?.length
+                }}
+              </span>
+            </button>
             }
           </div>
 
           <!-- Results List - COMPACT VIEW -->
           @if (compactView()) {
-            <div class="space-y-2">
-              @for (result of visibleResults(); track result.test_name) {
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow duration-200">
-                  <!-- Compact Header (always visible) -->
-                  <button
-                    (click)="toggleItem(result.test_name)"
-                    class="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-                  >
-                    <div class="flex items-center gap-4 flex-1 min-w-0">
-                      <!-- Status indicator -->
-                      <div [class]="'flex-shrink-0 w-3 h-3 rounded-full ' + (result.status === 'normal' ? 'bg-green-500' : result.status === 'critical' ? 'bg-red-600' : result.status === 'high' ? 'bg-orange-500' : 'bg-blue-500')"></div>
-                      
-                      <!-- Test name -->
-                      <span class="font-semibold text-gray-900 dark:text-white text-left truncate">{{ result.test_name }}</span>
-                      
-                      <!-- Value -->
-                      <div class="flex items-center gap-2 ml-auto">
-                        <span class="text-lg font-bold text-gray-900 dark:text-white">{{ result.value || 'N/A' }}</span>
-                        @if (result.unit) {
-                          <span class="text-sm text-gray-500 dark:text-gray-400">{{ result.unit }}</span>
-                        }
-                      </div>
-                      
-                      <!-- Status badge -->
-                      <span [class]="'flex-shrink-0 px-2 py-1 rounded-full text-xs font-medium ' + (result.status === 'normal' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : result.status === 'critical' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : result.status === 'high' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400')">
-                        {{ getStatusIcon(result.status) }} {{ getStatusText(result.status) }}
-                      </span>
-                    </div>
-                    
-                    <!-- Expand icon -->
-                    <svg 
-                      class="flex-shrink-0 w-5 h-5 ml-3 text-gray-400 transition-transform duration-200" 
-                      [class.rotate-180]="isExpanded(result.test_name)"
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  </button>
-
-                  <!-- Expanded content -->
-                  @if (isExpanded(result.test_name)) {
-                    <div class="px-4 pb-4 pt-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                      <!-- Reference range -->
-                      @if (result.reference_range) {
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                          <span class="font-medium">Rango normal:</span> {{ result.reference_range }}
-                        </div>
-                      }
-                      
-                      <!-- Simple explanation -->
-                      <div class="p-3 bg-white dark:bg-gray-800 rounded-lg mb-2">
-                        <h5 class="font-medium text-gray-900 dark:text-white text-sm mb-1">¿Qué es esto?</h5>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">
-                          {{ result.simplified_explanation || 'Análisis médico de laboratorio' }}
-                        </p>
-                      </div>
-
-                      <!-- Clinical interpretation -->
-                      <div class="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800/50">
-                        <h5 class="font-medium text-gray-900 dark:text-white text-sm mb-1 flex items-center">
-                          <svg class="w-4 h-4 mr-1 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                          </svg>
-                          Interpretación
-                        </h5>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">{{ result.clinical_interpretation }}</p>
-                      </div>
-
-                      <!-- Warning for abnormal values -->
-                      @if (result.status !== 'normal') {
-                        <div class="mt-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800/50">
-                          <p class="text-red-700 dark:text-red-300 text-sm font-medium">
-                            @if (result.status === 'critical') {
-                              ⚠️ Valor crítico. Requiere atención médica inmediata.
-                            } @else if (result.status === 'high') {
-                              ⚠️ Valor elevado. Consulte con su médico para evaluación.
-                            } @else {
-                              ⚠️ Valor bajo. Consulte con su médico si tiene síntomas.
-                            }
-                          </p>
-                        </div>
-                      }
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-          }
-
-          <!-- Results List - DETAILED VIEW (original) -->
-          @if (!compactView()) {
-            <div class="space-y-4">
+          <div class="space-y-2">
             @for (result of visibleResults(); track result.test_name) {
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
-                <div class="flex items-start justify-between mb-4">
-                  <div class="flex-1">
-                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ result.test_name }}</h4>
-                    <div class="flex items-center space-x-4 mb-3">
-                      <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ result.value || 'N/A' }}</span>
-                      @if (result.unit) {
-                        <span class="text-gray-500 dark:text-gray-400">{{ result.unit }}</span>
-                      }
-                    </div>
-                    @if (result.reference_range) {
-                      <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                        <span class="font-medium">Rango normal:</span> {{ result.reference_range }}
-                      </div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow duration-200"
+            >
+              <!-- Compact Header (always visible) -->
+              <button
+                (click)="toggleItem(result.test_name)"
+                class="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                [attr.aria-label]="'Ver detalles de ' + result.test_name"
+                [attr.aria-expanded]="isExpanded(result.test_name)"
+              >
+                <div class="flex items-center gap-4 flex-1 min-w-0">
+                  <!-- Status indicator -->
+                  <div
+                    [class]="
+                      'flex-shrink-0 w-3 h-3 rounded-full ' +
+                      (result.status === 'normal'
+                        ? 'bg-green-500'
+                        : result.status === 'critical'
+                        ? 'bg-red-600'
+                        : result.status === 'high'
+                        ? 'bg-orange-500'
+                        : 'bg-blue-500')
+                    "
+                  ></div>
+
+                  <!-- Test name -->
+                  <span
+                    class="font-semibold text-gray-900 dark:text-white text-left truncate"
+                    >{{ result.test_name }}</span
+                  >
+
+                  <!-- Value -->
+                  <div class="flex items-center gap-2 ml-auto">
+                    <span
+                      class="text-lg font-bold text-gray-900 dark:text-white"
+                      >{{ result.value || "N/A" }}</span
+                    >
+                    @if (result.unit) {
+                    <span class="text-sm text-gray-600 dark:text-gray-300">{{
+                      result.unit
+                    }}</span>
                     }
                   </div>
-                  <div [class]="'px-3 py-1 rounded-full text-sm font-medium border ' + getStatusColor(result.status)">
-                    <span class="mr-1">{{ getStatusIcon(result.status) }}</span>
+
+                  <!-- Status badge -->
+                  <span
+                    [class]="
+                      'flex-shrink-0 px-2 py-1 rounded-full text-xs font-medium ' +
+                      (result.status === 'normal'
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                        : result.status === 'critical'
+                        ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                        : result.status === 'high'
+                        ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400')
+                    "
+                  >
+                    {{ getStatusIcon(result.status) }}
                     {{ getStatusText(result.status) }}
-                  </div>
+                  </span>
                 </div>
-                
-                <!-- Simple explanation always visible -->
-                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-3">
-                  <h5 class="font-medium text-gray-900 dark:text-white mb-2">¿Qué significa?</h5>
-                  <p class="text-gray-700 dark:text-gray-300">
-                    {{ result.simplified_explanation || 'Análisis médico de laboratorio' }}
+
+                <!-- Expand icon -->
+                <svg
+                  class="flex-shrink-0 w-5 h-5 ml-3 text-gray-400 transition-transform duration-200"
+                  [class.rotate-180]="isExpanded(result.test_name)"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+
+              <!-- Expanded content -->
+              @if (isExpanded(result.test_name)) {
+              <div
+                class="px-4 pb-4 pt-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50"
+              >
+                <!-- Reference range -->
+                @if (result.reference_range) {
+                <div class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  <span class="font-medium">Rango normal:</span>
+                  {{ result.reference_range }}
+                </div>
+                }
+
+                <!-- Simple explanation -->
+                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg mb-2">
+                  <h5
+                    class="font-medium text-gray-900 dark:text-white text-sm mb-1"
+                  >
+                    ¿Qué es esto?
+                  </h5>
+                  <p class="text-gray-700 dark:text-gray-300 text-sm">
+                    {{
+                      result.simplified_explanation ||
+                        "Análisis médico de laboratorio"
+                    }}
+                  </p>
+                </div>
+
+                <!-- Clinical interpretation -->
+                <div
+                  class="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800/50"
+                >
+                  <h5
+                    class="font-medium text-gray-900 dark:text-white text-sm mb-1 flex items-center"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-1 text-amber-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    Interpretación
+                  </h5>
+                  <p class="text-gray-700 dark:text-gray-300 text-sm">
+                    {{ result.clinical_interpretation }}
                   </p>
                 </div>
 
                 <!-- Warning for abnormal values -->
-                @if (result.status === 'high' || result.status === 'critical' || result.status === 'low') {
-                  <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 mb-3">
-                    <h5 class="font-medium text-red-800 dark:text-red-200 mb-2 flex items-center">
-                      <svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      ⚠️ Advertencia
-                    </h5>
-                    @if (result.status === 'high') {
-                      <p class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium">Este valor está elevado. Consulte con su médico para evaluación.</p>
-                    } @else if (result.status === 'critical') {
-                      <p class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium">⚠️ Valor crítico. Requiere atención médica inmediata.</p>
-                    } @else {
-                      <p class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium">Este valor está bajo. Consulte con su médico si tiene síntomas.</p>
-                    }
-                  </div>
-                }
-
-                <!-- Clinical interpretation (conditionally shown) -->
-                @if (showDetailedView()) {
-                  <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <h5 class="font-medium text-gray-900 dark:text-white mb-2 flex items-center">
-                      <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      ¿Qué indican los valores altos y bajos?
-                    </h5>
-                    <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{{ result.clinical_interpretation }}</p>
-                  </div>
+                @if (result.status !== 'normal') {
+                <div
+                  class="mt-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800/50"
+                >
+                  <p class="text-red-700 dark:text-red-300 text-sm font-medium">
+                    @if (result.status === 'critical') { ⚠️ Valor crítico.
+                    Requiere atención médica inmediata. } @else if
+                    (result.status === 'high') { ⚠️ Valor elevado. Consulte con
+                    su médico para evaluación. } @else { ⚠️ Valor bajo. Consulte
+                    con su médico si tiene síntomas. }
+                  </p>
+                </div>
                 }
               </div>
+              }
+            </div>
+            }
+          </div>
+          }
+
+          <!-- Results List - DETAILED VIEW (original) -->
+          @if (!compactView()) {
+          <div class="space-y-4">
+            @for (result of visibleResults(); track result.test_name) {
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-200"
+            >
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <h4
+                    class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
+                  >
+                    {{ result.test_name }}
+                  </h4>
+                  <div class="flex items-center space-x-4 mb-3">
+                    <span
+                      class="text-2xl font-bold text-gray-900 dark:text-white"
+                      >{{ result.value || "N/A" }}</span
+                    >
+                    @if (result.unit) {
+                    <span class="text-gray-500 dark:text-gray-400">{{
+                      result.unit
+                    }}</span>
+                    }
+                  </div>
+                  @if (result.reference_range) {
+                  <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    <span class="font-medium">Rango normal:</span>
+                    {{ result.reference_range }}
+                  </div>
+                  }
+                </div>
+                <div
+                  [class]="
+                    'px-3 py-1 rounded-full text-sm font-medium border ' +
+                    getStatusColor(result.status)
+                  "
+                >
+                  <span class="mr-1">{{ getStatusIcon(result.status) }}</span>
+                  {{ getStatusText(result.status) }}
+                </div>
+              </div>
+
+              <!-- Simple explanation always visible -->
+              <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-3">
+                <h5 class="font-medium text-gray-900 dark:text-white mb-2">
+                  ¿Qué significa?
+                </h5>
+                <p class="text-gray-700 dark:text-gray-300">
+                  {{
+                    result.simplified_explanation ||
+                      "Análisis médico de laboratorio"
+                  }}
+                </p>
+              </div>
+
+              <!-- Warning for abnormal values -->
+              @if (result.status === 'high' || result.status === 'critical' ||
+              result.status === 'low') {
+              <div
+                class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 mb-3"
+              >
+                <h5
+                  class="font-medium text-red-800 dark:text-red-200 mb-2 flex items-center"
+                >
+                  <svg
+                    class="w-4 h-4 mr-2 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  ⚠️ Advertencia
+                </h5>
+                @if (result.status === 'high') {
+                <p
+                  class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium"
+                >
+                  Este valor está elevado. Consulte con su médico para
+                  evaluación.
+                </p>
+                } @else if (result.status === 'critical') {
+                <p
+                  class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium"
+                >
+                  ⚠️ Valor crítico. Requiere atención médica inmediata.
+                </p>
+                } @else {
+                <p
+                  class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium"
+                >
+                  Este valor está bajo. Consulte con su médico si tiene
+                  síntomas.
+                </p>
+                }
+              </div>
+              }
+
+              <!-- Clinical interpretation (conditionally shown) -->
+              @if (showDetailedView()) {
+              <div
+                class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800"
+              >
+                <h5
+                  class="font-medium text-gray-900 dark:text-white mb-2 flex items-center"
+                >
+                  <svg
+                    class="w-4 h-4 mr-2 text-amber-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  ¿Qué indican los valores altos y bajos?
+                </h5>
+                <p
+                  class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed"
+                >
+                  {{ result.clinical_interpretation }}
+                </p>
+              </div>
+              }
+            </div>
             }
           </div>
           }
 
           <!-- Recommendations -->
-          @if (analysisResult()?.recommendations && analysisResult()!.recommendations.length > 0) {
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
-                Recomendaciones Generales
-              </h3>
-              <div class="space-y-3">
-                @for (recommendation of analysisResult()?.recommendations; track $index) {
-                  <div class="flex items-start">
-                    <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <p class="text-gray-700 dark:text-gray-300">{{ recommendation }}</p>
-                  </div>
-                }
+          @if (analysisResult()?.recommendations &&
+          analysisResult()!.recommendations.length > 0) {
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
+            <h3
+              class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center"
+            >
+              <svg
+                class="w-5 h-5 mr-2 text-yellow-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                ></path>
+              </svg>
+              Recomendaciones Generales
+            </h3>
+            <div class="space-y-3">
+              @for (recommendation of analysisResult()?.recommendations; track
+              $index) {
+              <div class="flex items-start">
+                <div
+                  class="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                ></div>
+                <p class="text-gray-700 dark:text-gray-300">
+                  {{ recommendation }}
+                </p>
               </div>
+              }
             </div>
+          </div>
           }
 
           <!-- Medical Disclaimer -->
-          <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6">
+          <div
+            class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6"
+          >
             <div class="flex items-start">
-              <svg class="w-6 h-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              <svg
+                class="w-6 h-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                ></path>
               </svg>
               <div>
-                <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Aviso Médico Importante</h4>
-                <p class="text-yellow-700 dark:text-yellow-300 text-sm leading-relaxed">
-                  Esta herramienta proporciona información educativa únicamente. <strong>No reemplaza la consulta médica profesional.</strong> 
-                  Siempre consulte a su médico para la interpretación correcta de sus análisis y decisiones sobre su salud.
+                <h4
+                  class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2"
+                >
+                  Aviso Médico Importante
+                </h4>
+                <p
+                  class="text-yellow-700 dark:text-yellow-300 text-sm leading-relaxed"
+                >
+                  Esta herramienta proporciona información educativa únicamente.
+                  <strong>No reemplaza la consulta médica profesional.</strong>
+                  Siempre consulte a su médico para la interpretación correcta
+                  de sus análisis y decisiones sobre su salud.
                 </p>
               </div>
             </div>
@@ -505,18 +963,30 @@
 
           <!-- Clear Button -->
           <div class="text-center">
-            <button 
+            <button
               (click)="limpiar()"
               class="inline-flex items-center px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+              aria-label="Limpiar y analizar otro archivo"
             >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
               </svg>
               Analizar otro archivo
             </button>
           </div>
         </div>
-      }
-    </div>
+        }
+      </div>
+    </main>
   </div>
 </div>
