@@ -88,7 +88,7 @@ BioMind transforma la manera en que las personas entienden sus análisis médico
 
 | Frontend | AI/Backend | Styling | Tooling |
 |----------|------------|---------|---------|
-| ![Angular](https://img.shields.io/badge/Angular-19-DD0031?style=for-the-badge&logo=angular&logoColor=white) | ![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white) | ![Tailwind](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) |
+| ![Angular](https://img.shields.io/badge/Angular-20-DD0031?style=for-the-badge&logo=angular&logoColor=white) | ![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white) | ![Tailwind](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) |
 | ![Signals](https://img.shields.io/badge/Angular%20Signals-Reactive-red?style=for-the-badge) | ![API REST](https://img.shields.io/badge/REST%20API-Backend-green?style=for-the-badge) | ![AOS](https://img.shields.io/badge/AOS-Animations-purple?style=for-the-badge) | ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white) |
 
 </div>
