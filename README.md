@@ -6,7 +6,7 @@
 
 **Una aplicación web inteligente que democratiza el acceso a la información médica**
 
-[![Angular](https://img.shields.io/badge/Angular-19-red?style=flat-square&logo=angular)](https://angular.io/)
+[![Angular](https://img.shields.io/badge/Angular-20-red?style=flat-square&logo=angular)](https://angular.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.0-cyan?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Gemini AI](https://img.shields.io/badge/Gemini%20AI-Powered-orange?style=flat-square&logo=google)](https://ai.google.dev/)
