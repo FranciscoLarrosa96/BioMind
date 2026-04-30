@@ -133,6 +133,10 @@
               <p class="text-sm text-gray-700 dark:text-gray-400 mt-2">
                 Solo archivos PDF (máx. 10MB)
               </p>
+              <p class="mt-3 max-w-xl text-xs text-gray-500 dark:text-gray-400">
+                Los documentos se procesan para generar el análisis y no se
+                almacenan permanentemente.
+              </p>
             </div>
           </div>
           }
@@ -314,6 +318,14 @@
           data-aos-delay="200"
           id="results-section"
         >
+          <app-medical-short-disclaimer></app-medical-short-disclaimer>
+
+          @if (analysisStatusSummary()) {
+          <app-analysis-status-summary
+            [summary]="analysisStatusSummary()!"
+          ></app-analysis-status-summary>
+          }
+
           <!-- Quick Stats Cards -->
           @if (stats()) {
           <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
@@ -509,6 +521,13 @@
 
           <!-- Summary -->
           <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
+            @if (statusHeadline()) {
+            <div
+              class="mb-4 rounded-xl bg-gray-50 p-4 text-lg font-bold text-gray-900 dark:bg-gray-700 dark:text-white"
+            >
+              {{ statusHeadline() }}
+            </div>
+            }
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
               Resumen General
             </h3>
@@ -520,6 +539,12 @@
               </p>
             </div>
           </div>
+
+          @if (analysisStatusSummary()) {
+          <app-next-steps
+            [status]="analysisStatusSummary()!.overallStatus"
+          ></app-next-steps>
+          }
 
           <!-- View Toggle and Filter -->
           <div class="flex flex-wrap gap-4 justify-center mb-6">
@@ -545,7 +570,7 @@
                   d="M4 6h16M4 12h16M4 18h16"
                 ></path>
               </svg>
-              {{ compactView() ? "Vista Detallada" : "Vista Compacta" }}
+              {{ compactView() ? "Explorar resultados" : "Vista compacta" }}
             </button>
 
             @if (abnormalResults().length > 0) {
@@ -693,10 +718,7 @@
                     ¿Qué es esto?
                   </h5>
                   <p class="text-gray-700 dark:text-gray-300 text-sm">
-                    {{
-                      result.simplified_explanation ||
-                        "Análisis médico de laboratorio"
-                    }}
+                    {{ getPatientMeaning(result) }}
                   </p>
                 </div>
 
@@ -723,7 +745,7 @@
                     Interpretación
                   </h5>
                   <p class="text-gray-700 dark:text-gray-300 text-sm">
-                    {{ result.clinical_interpretation }}
+                    {{ getPatientInterpretation(result) }}
                   </p>
                 </div>
 
@@ -741,6 +763,29 @@
                   </p>
                 </div>
                 }
+
+                <div class="mt-3">
+                  <button
+                    (click)="explainBetter(result)"
+                    [disabled]="isExplaining(result)"
+                    class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                    [attr.aria-label]="'Explicar mejor ' + result.test_name"
+                  >
+                    {{
+                      isExplaining(result)
+                        ? "Generando..."
+                        : "💬 Explicame mejor"
+                    }}
+                  </button>
+
+                  @if (getAiExplanation(result)) {
+                  <div
+                    class="mt-3 rounded-lg border border-primary-100 bg-primary-50 p-3 text-sm text-gray-700 dark:border-primary-800/60 dark:bg-primary-900/20 dark:text-gray-300"
+                  >
+                    {{ getAiExplanation(result) }}
+                  </div>
+                  }
+                </div>
               </div>
               }
             </div>
@@ -797,10 +842,7 @@
                   ¿Qué significa?
                 </h5>
                 <p class="text-gray-700 dark:text-gray-300">
-                  {{
-                    result.simplified_explanation ||
-                      "Análisis médico de laboratorio"
-                  }}
+                  {{ getPatientMeaning(result) }}
                 </p>
               </div>
 
@@ -878,10 +920,33 @@
                 <p
                   class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed"
                 >
-                  {{ result.clinical_interpretation }}
+                  {{ getPatientInterpretation(result) }}
                 </p>
               </div>
               }
+
+              <div class="mt-3">
+                <button
+                  (click)="explainBetter(result)"
+                  [disabled]="isExplaining(result)"
+                  class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                  [attr.aria-label]="'Explicar mejor ' + result.test_name"
+                >
+                  {{
+                    isExplaining(result)
+                      ? "Generando..."
+                      : "💬 Explicame mejor"
+                  }}
+                </button>
+
+                @if (getAiExplanation(result)) {
+                <div
+                  class="mt-3 rounded-lg border border-primary-100 bg-primary-50 p-3 text-sm text-gray-700 dark:border-primary-800/60 dark:bg-primary-900/20 dark:text-gray-300"
+                >
+                  {{ getAiExplanation(result) }}
+                </div>
+                }
+              </div>
             </div>
             }
           </div>

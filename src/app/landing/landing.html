@@ -75,6 +75,13 @@
             </svg>
           </button>
           <button
+            (click)="goToDemo()"
+            class="px-8 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold text-lg border-2 border-cyan-200 dark:border-cyan-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+            aria-label="Probar BioMind con un ejemplo"
+          >
+            <span>🧪 Probar con ejemplo</span>
+          </button>
+          <button
             (click)="scrollToFeatures()"
             class="px-8 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-gray-700 transition-all duration-200 flex items-center gap-2"
             aria-label="Desplazarse a la sección de características"
@@ -129,6 +136,59 @@
               class="w-full h-auto rounded-xl shadow-lg"
             />
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why BioMind Section -->
+    <section class="py-16 bg-white dark:bg-gray-800/50">
+      <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+          <h2
+            class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
+          >
+            ¿Por qué BioMind?
+          </h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+            Muchos pacientes reciben análisis que no logran interpretar por sí
+            mismos. BioMind utiliza inteligencia artificial para traducir esos
+            resultados a un lenguaje claro y accesible.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Audience Section -->
+    <section class="py-20">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2
+            class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+          >
+            ¿Para quién es BioMind?
+          </h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Una experiencia pensada para explicar mejor, consultar mejor y
+            acompañar mejor.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          @for (audience of audiences; track audience.title) {
+          <div
+            class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+            [attr.data-aos]="'fade-up'"
+            [attr.data-aos-delay]="$index * 100"
+          >
+            <div class="text-5xl mb-4">{{ audience.icon }}</div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              {{ audience.title }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+              {{ audience.description }}
+            </p>
+          </div>
+          }
         </div>
       </div>
     </section>

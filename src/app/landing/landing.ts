@@ -32,7 +32,7 @@ export class Landing {
     {
       icon: '🔒',
       title: '100% Privado',
-      description: 'Tus documentos se procesan de forma segura y no se almacenan. Tu privacidad es nuestra prioridad.'
+      description: 'Tus documentos se procesan para generar el análisis y no se almacenan permanentemente.'
     },
     {
       icon: '🎨',
@@ -75,8 +75,30 @@ export class Landing {
     { name: 'Signals API', color: 'text-purple-600' }
   ];
 
+  audiences = [
+    {
+      icon: '👤',
+      title: 'Pacientes',
+      description: 'Entendé tus análisis sin lenguaje técnico'
+    },
+    {
+      icon: '👨‍⚕️',
+      title: 'Profesionales',
+      description: 'Ahorra tiempo explicando estudios básicos'
+    },
+    {
+      icon: '🏥',
+      title: 'Clínicas',
+      description: 'Mejorá la experiencia de tus pacientes'
+    }
+  ];
+
   goToAnalysis() {
     this.router.navigate(['/analysis']);
+  }
+
+  goToDemo() {
+    this.router.navigate(['/analysis'], { queryParams: { demo: 'true' } });
   }
 
   scrollToFeatures() {

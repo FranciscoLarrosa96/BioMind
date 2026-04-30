@@ -1,279 +1,106 @@
-# BioMind 🧬
+# BioMind
 
-<div align="center">
+BioMind es una app web que ayuda a entender analisis medicos en PDF con explicaciones claras generadas por IA.
 
-![BioMind Logo](https://img.shields.io/badge/BioMind-Medical%20AI%20Analysis-blue?style=for-the-badge&logo=dna&logoColor=white)
+La idea es simple: muchas personas reciben resultados de laboratorio llenos de terminos tecnicos y valores dificiles de interpretar. BioMind transforma ese informe en un resumen entendible, marca valores normales o para revisar, y ofrece proximos pasos prudentes sin reemplazar la consulta medica.
 
-**Una aplicación web inteligente que democratiza el acceso a la información médica**
+## Demo
 
-[![Angular](https://img.shields.io/badge/Angular-19-red?style=flat-square&logo=angular)](https://angular.io/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.0-cyan?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![Gemini AI](https://img.shields.io/badge/Gemini%20AI-Powered-orange?style=flat-square&logo=google)](https://ai.google.dev/)
+- Demo en vivo: https://franciscolarrosa96.github.io/BioMind/
+- Demo automatica: https://franciscolarrosa96.github.io/BioMind/analysis?demo=true
 
-[🚀 Demo en vivo](#) | [📖 Documentación](#) | [🐛 Reportar Bug](https://github.com/FranciscoLarrosa96/BioMind/issues)
+Desde la landing tambien podes usar el boton **Probar con ejemplo** para ver resultados sin subir un archivo propio.
 
-</div>
+## Que problema resuelve
 
----
+- Reduce la friccion de entender un PDF de laboratorio.
+- Traduce lenguaje tecnico a explicaciones para pacientes.
+- Resume el estado general del analisis: Normal, Revisar o Atencion.
+- Ayuda a preparar mejores preguntas para la consulta medica.
+- Refuerza que la herramienta es orientativa y no reemplaza a un profesional.
 
-## ✨ ¿Qué es BioMind?
+## Como funciona
 
-BioMind transforma la manera en que las personas entienden sus análisis médicos. Utilizando inteligencia artificial avanzada de Google Gemini, convierte PDFs de estudios de laboratorio en explicaciones claras y comprensibles para cualquier persona.
+1. El usuario sube un PDF de analisis medico.
+2. BioMind envia el documento al backend configurado para procesarlo con Google Gemini.
+3. La IA extrae datos del paciente, estudios, valores, rangos e interpretaciones.
+4. La interfaz muestra un resumen general, estado del analisis, cards por estudio y recomendaciones.
+5. El usuario puede pedir una explicacion mas simple por cada estudio con **Explicame mejor**.
 
-### 🎯 **Problema que resuelve**
-- ❌ Terminología médica compleja e incomprensible
-- ❌ Ansiedad por no entender los resultados
-- ❌ Largos tiempos de espera para consultas médicas
-- ❌ Falta de contexto sobre qué significan los valores
+Los documentos se procesan para generar el analisis y no se almacenan permanentemente desde el frontend.
 
-### ✅ **Nuestra solución**
-- ✨ Explicaciones simples y en español
-- 🎨 Interfaz intuitiva y moderna
-- ⚡ Análisis instantáneo con IA
-- 🔒 Procesamiento seguro y privado
+## Screenshots
 
----
+### Landing
 
-## � Características Principales
+![Landing de BioMind](src/assets/previa.avif)
 
-<table>
-<tr>
-<td width="50%">
+### Flujo de analisis
 
-### 🤖 **Análisis Inteligente**
-- Powered by Google Gemini AI
-- Reconocimiento automático de valores
-- Clasificación inteligente (Normal/Alto/Bajo/Crítico)
-- Soporte para múltiples tipos de análisis
+La pantalla de resultados incluye:
 
-</td>
-<td width="50%">
+- Aviso medico corto al inicio.
+- Estado general del analisis.
+- Headline contextual segun resultado.
+- Resumen general.
+- Cards por estudio con valor, rango, estado e interpretacion.
+- Acciones sugeridas en "Que hacer ahora".
+- Aviso medico completo al final.
 
-### 🎨 **Experiencia de Usuario**
-- Diseño responsive y moderno
-- Modo oscuro/claro
-- Drag & drop para archivos
-- Animaciones suaves y elegantes
+## Stack tecnologico
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+- Angular 20
+- TypeScript
+- Angular Signals
+- Tailwind CSS
+- Google Gemini AI
+- Backend REST para proxy seguro hacia Gemini
 
-### 📊 **Interpretación Completa**
-- Resumen general del análisis
-- Explicaciones técnicas y simplificadas
-- Recomendaciones generales
-- Indicadores visuales de estado
-
-</td>
-<td width="50%">
-
-### 🔐 **Seguridad y Privacidad**
-- Procesamiento temporal de archivos
-- Sin almacenamiento de datos personales
-- Comunicación encriptada
-- Cumplimiento de buenas prácticas
-
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 Stack Tecnológico
-
-<div align="center">
-
-| Frontend | AI/Backend | Styling | Tooling |
-|----------|------------|---------|---------|
-| ![Angular](https://img.shields.io/badge/Angular-19-DD0031?style=for-the-badge&logo=angular&logoColor=white) | ![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white) | ![Tailwind](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) |
-| ![Signals](https://img.shields.io/badge/Angular%20Signals-Reactive-red?style=for-the-badge) | ![API REST](https://img.shields.io/badge/REST%20API-Backend-green?style=for-the-badge) | ![AOS](https://img.shields.io/badge/AOS-Animations-purple?style=for-the-badge) | ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white) |
-
-</div>
-
----
-
-## �️ Instalación y Configuración
-
-### Requisitos Previos
-- **Node.js** >= 18.x
-- **npm** o **yarn**
-- **API Key de Google Gemini**
-- **Backend configurado** (ver [configuración](#backend))
-
-### Instalación Rápida
+## Desarrollo local
 
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/FranciscoLarrosa96/BioMind.git
-cd BioMind
-
-# 2. Instalar dependencias
 npm install
-
-# 3. Configurar variables de entorno
-# Editar src/environments/environment.ts
-# y src/environments/environment.prod.ts
-
-# 4. Iniciar servidor de desarrollo
 npm start
-
-# 5. Abrir navegador en http://localhost:4200
 ```
 
-### <a name="backend"></a>🏗️ Configuración del Backend
+Abrir:
 
-La aplicación requiere un backend que maneje las peticiones a Gemini AI:
+```text
+http://localhost:4200
+```
 
-```javascript
-// Endpoint requerido: POST /ai/generate
+Para probar la demo automatica:
+
+```text
+http://localhost:4200/analysis?demo=true
+```
+
+## Backend requerido
+
+La app espera un endpoint:
+
+```text
+POST /ai/generate
+```
+
+Payload esperado desde el frontend:
+
+```json
 {
   "model": "gemini-2.5-flash-lite",
-  "payload": {
-    // Payload de Gemini con el PDF en base64
-  }
+  "payload": {}
 }
 ```
 
-**Variables de entorno necesarias:**
+Configurar la URL del backend en:
 
-```typescript
-// src/environments/environment.ts
-export const environment = {
-  production: false,
-  apiBase: 'http://localhost:3000' // URL de tu backend
-};
+```text
+src/environments/environment.ts
+src/environments/environment.prod.ts
 ```
 
----
+## Aviso medico
 
-## 📱 Guía de Uso
+BioMind brinda informacion educativa y orientativa generada con IA. No diagnostica, no indica medicacion y no reemplaza la consulta medica profesional.
 
-### 1. **Subir Análisis**
-- Arrastra y suelta tu PDF de análisis médico
-- O haz clic para seleccionar desde tu dispositivo
-- Formatos soportados: PDF
-
-### 2. **Procesamiento IA**
-- Haz clic en "Analizar con IA"
-- Espera mientras Gemini procesa tu documento
-- El análisis toma entre 10-30 segundos
-
-### 3. **Revisar Resultados**
-- **Resumen General**: Vista panorámica de tu análisis
-- **Valores Detallados**: Cada parámetro con explicación
-- **Recomendaciones**: Consejos generales de salud
-- **Vista Técnica**: Información detallada para profesionales
-
----
-
-## 🎨 Capturas de Pantalla
-
-<div align="center">
-
-### 📤 Interfaz de Carga
-*Interfaz intuitiva con drag & drop para subir archivos PDF*
-
-### 📊 Resultados del Análisis
-*Vista detallada de resultados con explicaciones simples*
-
-### 🌙 Modo Oscuro
-*Soporte completo para tema claro y oscuro*
-
-</div>
-
----
-
-## ⚠️ Aviso Médico Importante
-
-<div align="center">
-<strong>🩺 Esta aplicación es solo para fines educativos e informativos</strong><br>
-<em>NO reemplaza la consulta médica profesional</em><br><br>
-Siempre consulte a su médico para la interpretación correcta de sus análisis y decisiones sobre su salud.
-</div>
-
----
-
-## 🔒 Seguridad y Privacidad
-
-- ✅ **Procesamiento temporal**: Los PDFs se procesan temporalmente y no se almacenan
-- ✅ **Comunicación segura**: Todas las comunicaciones con la API son encriptadas
-- ✅ **Sin datos personales**: No guardamos información médica o personal
-- ✅ **Cumplimiento normativo**: Seguimos las mejores prácticas de privacidad
-
----
-
-## 🤝 Contribuir al Proyecto
-
-¡Nos encanta recibir contribuciones! Sigue estos pasos:
-
-1. **Fork** el proyecto
-2. **Crea** una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** tus cambios (`git commit -m 'Add: Amazing new feature'`)
-4. **Push** a la rama (`git push origin feature/AmazingFeature`)
-5. **Abre** un Pull Request
-
-### � Reportar Issues
-- Usa las [plantillas de issues](https://github.com/FranciscoLarrosa96/BioMind/issues/new/choose)
-- Incluye información detallada del problema
-- Adjunta capturas de pantalla si es posible
-
-### 💡 Ideas y Sugerencias
-- Abre un [Issue de tipo Feature Request](https://github.com/FranciscoLarrosa96/BioMind/issues/new?template=feature_request.md)
-- Describe claramente la funcionalidad propuesta
-- Explica cómo beneficiaría a los usuarios
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la **Licencia MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
-
----
-
-## 🙏 Agradecimientos
-
-<div align="center">
-
-**Un especial agradecimiento a:**
-
-🤖 **Google Gemini AI** - Por la tecnología de procesamiento de documentos<br>
-🅰️ **Angular Team** - Por el increíble framework<br>
-🎨 **Tailwind CSS** - Por el sistema de diseño<br>
-👥 **Comunidad Médica** - Por inspirar esta herramienta<br>
-💡 **Contribuidores** - Por hacer BioMind mejor cada día
-
-</div>
-
----
-
-## 📞 Soporte y Contacto
-
-<div align="center">
-
-¿Necesitas ayuda? ¡Estamos aquí para ti!
-
-[![GitHub Issues](https://img.shields.io/badge/GitHub-Issues-black?style=for-the-badge&logo=github)](https://github.com/FranciscoLarrosa96/BioMind/issues)
-[![Documentation](https://img.shields.io/badge/Docs-Angular-red?style=for-the-badge&logo=angular)](https://angular.dev)
-[![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-Questions-orange?style=for-the-badge&logo=stackoverflow)](https://stackoverflow.com/questions/tagged/angular)
-
-**¿Tienes preguntas específicas?**
-- 📋 Revisa la [documentación del proyecto](#)
-- 🔍 Busca en [issues existentes](https://github.com/FranciscoLarrosa96/BioMind/issues)
-- 💬 Abre un [nuevo issue](https://github.com/FranciscoLarrosa96/BioMind/issues/new)
-
-</div>
-
----
-
-<div align="center">
-
-**Desarrollado con ❤️ para hacer más accesible la información médica**
-
-⭐ **¡Si te gusta BioMind, danos una estrella!** ⭐
-
-[⬆️ Volver arriba](#biomind-)
-
-</div>
+Ante sintomas importantes, valores criticos o dudas sobre el informe, consultar con un profesional de salud.
