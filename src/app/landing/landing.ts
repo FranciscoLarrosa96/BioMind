@@ -15,81 +15,75 @@ export class Landing {
 
   features = [
     {
-      icon: '🧠',
-      title: 'Inteligencia Artificial Avanzada',
-      description: 'Utiliza Google Gemini AI para analizar y extraer información de tus estudios médicos con precisión.'
+      icon: 'fa-solid fa-brain',
+      title: 'Inteligencia artificial avanzada',
+      description: 'Google Gemini AI lee tus estudios y extrae cada valor con precisión clínica.',
+      featured: true
     },
     {
-      icon: '⚡',
-      title: 'Resultados en Segundos',
-      description: 'Sube tu PDF y obtén un análisis completo en menos de 10 segundos. Rápido, simple y efectivo.'
+      icon: 'fa-solid fa-bolt',
+      title: 'Resultados en segundos',
+      description: 'Subís el PDF y en menos de 10 segundos tenés el análisis completo.'
     },
     {
-      icon: '📊',
-      title: 'Interpretación Clara',
-      description: 'Transforma datos técnicos en explicaciones sencillas. Comprende qué significa cada valor.'
+      icon: 'fa-solid fa-magnifying-glass-chart',
+      title: 'Interpretación clara',
+      description: 'Cada valor técnico se traduce a una explicación que se entiende de una.'
     },
     {
-      icon: '🔒',
-      title: '100% Privado',
-      description: 'Tus documentos se procesan para generar el análisis y no se almacenan permanentemente.'
+      icon: 'fa-solid fa-shield-halved',
+      title: '100% privado',
+      description: 'Tus documentos se procesan al vuelo y no quedan almacenados.'
     },
     {
-      icon: '🎨',
-      title: 'Interfaz Moderna',
-      description: 'Diseño intuitivo y responsive con modo claro/oscuro. Desarrollado con Angular 20 y Tailwind CSS.'
+      icon: 'fa-solid fa-display',
+      title: 'Interfaz moderna',
+      description: 'Modo claro y oscuro, pensada para leerse bien en cualquier pantalla.'
     },
     {
-      icon: '🌐',
+      icon: 'fa-solid fa-globe',
       title: 'Multiplataforma',
-      description: 'Funciona en cualquier dispositivo: computadora, tablet o móvil. Accede desde donde quieras.'
+      description: 'Funciona igual de bien en la computadora, la tablet o el celular.',
+      inverted: true
     }
   ];
 
   steps = [
     {
       number: '01',
-      title: 'Sube tu PDF',
-      description: 'Arrastra o selecciona tu análisis médico en formato PDF',
-      icon: '📄'
+      title: 'Subí tu PDF',
+      description: 'Arrastrá o seleccioná tu análisis médico en formato PDF.',
+      icon: 'fa-solid fa-file-arrow-up'
     },
     {
       number: '02',
-      title: 'IA Analiza',
-      description: 'Google Gemini procesa el documento y extrae todos los valores',
-      icon: '🤖'
+      title: 'La IA lo analiza',
+      description: 'Gemini procesa el documento y extrae todos los valores.',
+      icon: 'fa-solid fa-robot'
     },
     {
       number: '03',
-      title: 'Resultados Claros',
-      description: 'Obtén interpretaciones simples de cada valor y recomendaciones',
-      icon: '✨'
+      title: 'Resultados claros',
+      description: 'Recibís una interpretación simple de cada valor, con recomendaciones.',
+      icon: 'fa-solid fa-sparkles'
     }
-  ];
-
-  techStack = [
-    { name: 'Angular 20', color: 'text-red-600' },
-    { name: 'Google Gemini AI', color: 'text-blue-600' },
-    { name: 'TypeScript', color: 'text-blue-500' },
-    { name: 'Tailwind CSS', color: 'text-cyan-600' },
-    { name: 'Signals API', color: 'text-purple-600' }
   ];
 
   audiences = [
     {
-      icon: '👤',
+      icon: 'fa-solid fa-user',
       title: 'Pacientes',
-      description: 'Entendé tus análisis sin lenguaje técnico'
+      description: 'Entendé tus análisis sin lenguaje técnico de por medio.'
     },
     {
-      icon: '👨‍⚕️',
+      icon: 'fa-solid fa-user-doctor',
       title: 'Profesionales',
-      description: 'Ahorra tiempo explicando estudios básicos'
+      description: 'Ahorrá tiempo explicando los estudios más habituales.'
     },
     {
-      icon: '🏥',
+      icon: 'fa-solid fa-hospital',
       title: 'Clínicas',
-      description: 'Mejorá la experiencia de tus pacientes'
+      description: 'Mejorá la experiencia de tus pacientes desde la primera consulta.'
     }
   ];
 
@@ -99,9 +93,5 @@ export class Landing {
 
   goToDemo() {
     this.router.navigate(['/analysis'], { queryParams: { demo: 'true' } });
-  }
-
-  scrollToFeatures() {
-    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
   }
 }

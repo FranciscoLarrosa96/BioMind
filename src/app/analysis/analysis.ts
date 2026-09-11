@@ -67,6 +67,7 @@ export class Analysis {
   compactView = signal<boolean>(true); // Vista compacta por defecto
   aiExplanations = signal<Record<string, string>>({});
   explainingItems = signal<Record<string, boolean>>({});
+  errorSeverity = signal<'error' | 'warning'>('error');
 
   constructor() {
     // Effect para limpiar errores cuando se selecciona un nuevo archivo
@@ -74,6 +75,7 @@ export class Analysis {
       const file = this.file();
       if (file) {
         this.error.set(null);
+        this.errorSeverity.set('error');
         this.analysisResult.set(null);
       }
     });
@@ -191,10 +193,10 @@ export class Analysis {
 
   // Computed para el color del mensaje de estado
   statusColor = computed(() => {
-    if (this.error()) return 'text-red-600 dark:text-red-400';
-    if (this.hasResults()) return 'text-green-600 dark:text-green-400';
-    if (this.hasFile()) return 'text-blue-600 dark:text-blue-400';
-    return 'text-gray-600 dark:text-gray-400';
+    if (this.error()) return 'text-rose-600 dark:text-rose-400';
+    if (this.hasResults()) return 'text-emerald-600 dark:text-emerald-400';
+    if (this.hasFile()) return 'text-primary-600 dark:text-primary-400';
+    return 'text-zinc-500 dark:text-zinc-400';
   });
 
   // Computed para resultados visibles según el filtro
@@ -213,10 +215,28 @@ export class Analysis {
 
   statusHeadline = computed(() => {
     const status = this.analysisStatusSummary()?.overallStatus;
-    if (status === 'Atención') return '🔴 Se detectaron valores críticos';
-    if (status === 'Revisar') return '🟡 Se detectaron valores para revisar';
-    if (status === 'Normal') return '🟢 Tu análisis general es NORMAL';
+    if (status === 'Atención') return 'Se detectaron valores críticos';
+    if (status === 'Revisar') return 'Se detectaron valores para revisar';
+    if (status === 'Normal') return 'Tu análisis general es normal';
     return '';
+  });
+
+  statusHeadlineClass = computed(() => {
+    const status = this.analysisStatusSummary()?.overallStatus;
+    if (status === 'Atención') {
+      return 'bg-rose-50 text-rose-800 dark:bg-rose-950/20 dark:text-rose-200';
+    }
+    if (status === 'Revisar') {
+      return 'bg-amber-50 text-amber-800 dark:bg-amber-950/20 dark:text-amber-200';
+    }
+    return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-200';
+  });
+
+  statusHeadlineIcon = computed(() => {
+    const status = this.analysisStatusSummary()?.overallStatus;
+    if (status === 'Atención') return 'fa-solid fa-circle-exclamation text-rose-600 dark:text-rose-400';
+    if (status === 'Revisar') return 'fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400';
+    return 'fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400';
   });
 
   onPick(e: Event) {
@@ -253,6 +273,7 @@ export class Analysis {
   private handleFile(f: File | null) {
     if (!f) return;
     if (f.type !== 'application/pdf') {
+      this.errorSeverity.set('error');
       this.error.set('El archivo debe ser un PDF de análisis médico.');
       return;
     }
@@ -394,12 +415,14 @@ trailer
   async analyzeWithAI(): Promise<void> {
     const f = this.file();
     if (!f) {
+      this.errorSeverity.set('error');
       this.error.set('Seleccioná un PDF de análisis primero');
       return;
     }
 
     this.isProcessing.set(true);
     this.error.set(null);
+    this.errorSeverity.set('error');
 
     try {
       const b64 = await this.fileToBase64(f);
@@ -714,17 +737,18 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
             partialData.summary ||
             'El formato de este laboratorio tiene una estructura diferente al estándar. No pudimos extraer todos los valores automáticamente.',
           recommendations: partialData.recommendations || [
-            '✓ El PDF es válido pero tiene un formato especial',
-            '⚠️ Algunos valores pueden no haberse detectado automáticamente',
-            '📋 Verifique manualmente los valores importantes en el PDF original',
-            '👨‍⚕️ Consulte con su médico para la interpretación completa',
-            '🔄 Si el laboratorio tiene versión digital actualizada, intente con esa',
+            'El PDF es válido pero tiene un formato especial.',
+            'Algunos valores pueden no haberse detectado automáticamente.',
+            'Verifique manualmente los valores importantes en el PDF original.',
+            'Consulte con su médico para la interpretación completa.',
+            'Si el laboratorio tiene versión digital actualizada, intente con esa.',
           ],
         };
 
         this.analysisResult.set(fallbackResult);
+        this.errorSeverity.set('warning');
         this.error.set(
-          '⚠️ PDF procesado con limitaciones: El formato de este laboratorio requiere revisión manual. Verifique los valores importantes directamente en el PDF.'
+          'PDF procesado con limitaciones: el formato de este laboratorio requiere revisión manual. Verifique los valores importantes directamente en el PDF.'
         );
       }
     } catch (e: any) {
@@ -758,6 +782,7 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
           'El servicio está temporalmente no disponible. Intente más tarde.';
       }
 
+      this.errorSeverity.set('error');
       this.error.set(errorMessage);
     } finally {
       this.isProcessing.set(false);
@@ -767,31 +792,75 @@ RESPONDE ÚNICAMENTE CON EL JSON, sin explicaciones adicionales.`;
   getStatusColor(status: string): string {
     switch (status) {
       case 'normal':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-800';
       case 'high':
-        return 'text-orange-600 bg-orange-50 border-orange-200';
+        return 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-300 dark:bg-amber-900/20 dark:border-amber-800';
       case 'low':
-        return 'text-blue-600 bg-blue-50 border-blue-200';
+        return 'text-sky-700 bg-sky-50 border-sky-200 dark:text-sky-300 dark:bg-sky-900/20 dark:border-sky-800';
       case 'critical':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-rose-700 bg-rose-50 border-rose-200 dark:text-rose-300 dark:bg-rose-900/20 dark:border-rose-800';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-zinc-700 bg-zinc-50 border-zinc-200 dark:text-zinc-300 dark:bg-zinc-800 dark:border-zinc-700';
     }
   }
 
-  getStatusIcon(status: string): string {
+  getStatusDotClass(status: string): string {
     switch (status) {
       case 'normal':
-        return '✓';
+        return 'bg-emerald-500';
       case 'high':
-        return '↑';
+        return 'bg-amber-500';
       case 'low':
-        return '↓';
+        return 'bg-sky-500';
       case 'critical':
-        return '⚠';
+        return 'bg-rose-500';
       default:
-        return '?';
+        return 'bg-zinc-400';
     }
+  }
+
+  getStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'normal':
+        return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400';
+      case 'high':
+        return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400';
+      case 'low':
+        return 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400';
+      case 'critical':
+        return 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400';
+      default:
+        return 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300';
+    }
+  }
+
+  getStatusIconClass(status: string): string {
+    switch (status) {
+      case 'normal':
+        return 'fa-solid fa-circle-check';
+      case 'high':
+        return 'fa-solid fa-arrow-trend-up';
+      case 'low':
+        return 'fa-solid fa-arrow-trend-down';
+      case 'critical':
+        return 'fa-solid fa-triangle-exclamation';
+      default:
+        return 'fa-solid fa-circle-question';
+    }
+  }
+
+  getSeverityTintClass(status: string): string {
+    if (status === 'critical') {
+      return 'bg-rose-50 dark:bg-rose-950/20';
+    }
+    return 'bg-amber-50 dark:bg-amber-950/20';
+  }
+
+  getSeverityTextClass(status: string): string {
+    if (status === 'critical') {
+      return 'text-rose-700 dark:text-rose-300';
+    }
+    return 'text-amber-700 dark:text-amber-300';
   }
 
   getStatusText(status: string): string {

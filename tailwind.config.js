@@ -29,7 +29,7 @@ module.exports = {
         hover: '#0f766e',       // Hover teal
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'], // Professional medical font
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Courier New', 'monospace'], // For medical data
       },
       boxShadow: {

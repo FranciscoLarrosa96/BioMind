@@ -16,9 +16,9 @@ export class App implements OnInit {
 
   ngOnInit() {
     AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: false, // solo se anima una vez
+      duration: 550,
+      easing: 'ease-out-cubic',
+      once: true,
     });
   }
 }

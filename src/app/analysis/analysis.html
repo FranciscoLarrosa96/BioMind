@@ -1,28 +1,14 @@
 <!-- Header Section -->
-<div
-  class="min-h-screen bg-gradient-to-br from-primary-50 to-white dark:from-gray-900 dark:to-gray-800"
->
-  <div class="container mx-auto px-4 py-8">
+<div class="min-h-screen bg-white dark:bg-zinc-950">
+  <div class="mx-auto max-w-5xl px-4 py-8">
     <!-- Top Bar with Back Button and Theme Toggle -->
-    <div class="flex justify-between items-center mb-6" data-aos="fade-down">
+    <div class="mb-8 flex items-center justify-between">
       <a
         routerLink="/"
-        class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        class="inline-flex items-center gap-2 text-zinc-600 transition-colors duration-150 ease-[var(--ease-out)] hover:text-primary-600 dark:text-zinc-400 dark:hover:text-primary-400"
         aria-label="Volver a la página principal"
       >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          ></path>
-        </svg>
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
         <span class="font-medium">Volver al inicio</span>
       </a>
       <app-theme-toggle></app-theme-toggle>
@@ -30,50 +16,32 @@
 
     <main>
       <!-- Hero Section -->
-      <div class="text-center mb-12" data-aos="fade-up">
+      <div class="mb-10">
         <div
-          class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-blue-600 rounded-2xl mb-6 shadow-lg"
+          class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-600 shadow-sm"
+          aria-hidden="true"
         >
-          <svg
-            class="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
-          </svg>
+          <i class="fa-solid fa-notes-medical text-xl text-white"></i>
         </div>
-        <h1
-          class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
-        >
-          Análisis Médico Inteligente
+        <h1 class="mb-3 text-3xl font-extrabold text-zinc-900 dark:text-white md:text-4xl">
+          Subí tu estudio médico
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Sube tu PDF de análisis médico y obtén interpretaciones claras en
-          segundos. Potenciado por <strong>Google Gemini AI</strong>.
+        <p class="max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+          Te devolvemos una interpretación clara en segundos, potenciada por Google Gemini AI.
         </p>
       </div>
 
       <!-- Upload Section -->
-      <div class="max-w-4xl mx-auto">
-        <div
-          class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-8 mb-8"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
+      <div class="mx-auto max-w-3xl">
+        <div class="mb-8 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <!-- File Upload Area -->
           @if (!file()) {
           <div
-            class="border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300"
+            class="rounded-2xl border-2 border-dashed p-12 text-center transition-colors duration-200 ease-[var(--ease-out)]"
             [class]="
               isDragOver()
                 ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                : 'border-gray-300 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500'
+                : 'border-zinc-300 dark:border-zinc-700 hover:border-primary-300 dark:hover:border-primary-600'
             "
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
@@ -81,47 +49,22 @@
           >
             <div class="flex flex-col items-center">
               <div
-                class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mb-4"
+                class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/30"
+                aria-hidden="true"
               >
-                <svg
-                  class="w-8 h-8 text-primary-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  ></path>
-                </svg>
+                <i class="fa-solid fa-cloud-arrow-up text-2xl text-primary-600 dark:text-primary-400"></i>
               </div>
-              <h3
-                class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
-              >
-                Arrastra tu análisis médico aquí
+              <h3 class="mb-2 text-lg font-semibold text-zinc-900 dark:text-white">
+                Arrastrá tu análisis médico acá
               </h3>
-              <p class="text-gray-500 dark:text-gray-400 mb-4">
-                O haz clic para seleccionar un archivo PDF
+              <p class="mb-4 text-zinc-500 dark:text-zinc-400">
+                O hacé clic para seleccionar un archivo PDF
               </p>
               <label
-                class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg cursor-pointer transition-colors duration-200"
+                class="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-primary-600 px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-150 ease-[var(--ease-out)] hover:bg-primary-700 active:scale-[0.97] active:duration-100"
               >
-                <svg
-                  class="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 4v16m8-8H4"
-                  ></path>
-                </svg>
-                Seleccionar archivo
+                <i class="fa-solid fa-file-arrow-up text-sm" aria-hidden="true"></i>
+                <span>Seleccionar archivo</span>
                 <input
                   type="file"
                   class="hidden"
@@ -130,12 +73,11 @@
                   aria-label="Seleccionar archivo PDF de análisis médico"
                 />
               </label>
-              <p class="text-sm text-gray-700 dark:text-gray-400 mt-2">
+              <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
                 Solo archivos PDF (máx. 10MB)
               </p>
-              <p class="mt-3 max-w-xl text-xs text-gray-500 dark:text-gray-400">
-                Los documentos se procesan para generar el análisis y no se
-                almacenan permanentemente.
+              <p class="mt-2 max-w-xl text-xs text-zinc-500 dark:text-zinc-500">
+                Los documentos se procesan para generar el análisis y no se almacenan permanentemente.
               </p>
             </div>
           </div>
@@ -143,57 +85,31 @@
 
           <!-- File Selected -->
           @if (file()) {
-          <div
-            class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6"
-            data-aos="fade-in"
-          >
+          <div class="mb-6 rounded-xl bg-zinc-50 p-6 dark:bg-zinc-800">
             <div class="flex items-center justify-between">
               <div class="flex items-center">
                 <div
-                  class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mr-4"
+                  class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-rose-50 dark:bg-rose-900/20"
+                  aria-hidden="true"
                 >
-                  <svg
-                    class="w-6 h-6 text-red-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
+                  <i class="fa-solid fa-file-pdf text-lg text-rose-600 dark:text-rose-400"></i>
                 </div>
                 <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white">
+                  <h4 class="font-medium text-zinc-900 dark:text-white">
                     {{ file()?.name }}
                   </h4>
-                  <p class="text-sm text-gray-700 dark:text-gray-300">
+                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     {{ (file()?.size! / 1024 / 1024).toFixed(2) }} MB
                   </p>
                 </div>
               </div>
               <button
                 (click)="limpiar()"
-                class="text-gray-400 hover:text-red-500 transition-colors duration-200"
+                class="rounded-lg p-2 text-zinc-400 transition-colors duration-150 ease-[var(--ease-out)] hover:bg-zinc-100 hover:text-rose-500 dark:hover:bg-zinc-700"
                 aria-label="Eliminar archivo seleccionado"
                 title="Eliminar archivo"
               >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -201,37 +117,22 @@
           <!-- Analyze Button -->
           <div class="text-center">
             <!-- Status Message -->
-            <p
-              class="mb-4 text-sm font-medium transition-all duration-300"
-              [ngClass]="statusColor()"
-            >
+            <p class="mb-4 text-sm font-medium" [ngClass]="statusColor()">
               {{ statusMessage() }}
             </p>
 
             <button
               (click)="analyzeWithAI()"
               [disabled]="!canAnalyze()"
-              class="inline-flex items-center px-8 py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed transform hover:scale-105 disabled:hover:scale-100"
+              class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-8 py-4 text-base font-semibold text-white shadow-sm transition-[background-color,transform] duration-150 ease-[var(--ease-out)] hover:bg-primary-700 active:scale-[0.97] active:duration-100 disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:active:scale-100 dark:disabled:bg-zinc-700"
             >
               @if (isProcessing()) {
-              <div
-                class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"
-              ></div>
-              Analizando... } @else {
-              <svg
-                class="w-5 h-5 mr-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                ></path>
-              </svg>
-              Analizar con IA }
+              <i class="fa-solid fa-spinner animate-spin" aria-hidden="true"></i>
+              <span>Analizando...</span>
+              } @else {
+              <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+              <span>Analizar con IA</span>
+              }
             </button>
           </div>
           }
@@ -239,72 +140,43 @@
           <!-- Error/Warning Message -->
           @if (error()) {
           <div
-            class="mt-6 p-5 rounded-xl border-l-4"
+            class="mt-6 flex items-start gap-3 rounded-xl p-5"
             [ngClass]="
-              error()?.includes('⚠️')
-                ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-700'
-                : 'bg-red-50 dark:bg-red-900/20 border-red-500 dark:border-red-800'
+              errorSeverity() === 'warning'
+                ? 'bg-amber-50 dark:bg-amber-950/20'
+                : 'bg-rose-50 dark:bg-rose-950/20'
             "
-            data-aos="fade-in"
           >
-            <div class="flex items-start">
-              <div class="flex-shrink-0">
-                @if (error()?.includes('⚠️')) {
-                <svg
-                  class="w-6 h-6 text-yellow-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  ></path>
-                </svg>
-                } @else {
-                <svg
-                  class="w-6 h-6 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                }
-              </div>
-              <div class="ml-3 flex-1">
-                <h3
-                  class="font-semibold mb-1"
-                  [ngClass]="
-                    error()?.includes('⚠️')
-                      ? 'text-yellow-800 dark:text-yellow-200'
-                      : 'text-red-800 dark:text-red-200'
-                  "
-                >
-                  {{
-                    error()?.includes("⚠️")
-                      ? "Información Importante"
-                      : "Error en el Procesamiento"
-                  }}
-                </h3>
-                <p
-                  class="text-sm whitespace-pre-line"
-                  [ngClass]="
-                    error()?.includes('⚠️')
-                      ? 'text-yellow-700 dark:text-yellow-300'
-                      : 'text-red-700 dark:text-red-300'
-                  "
-                >
-                  {{ error() }}
-                </p>
-              </div>
+            <i
+              class="mt-0.5 flex-shrink-0"
+              [ngClass]="
+                errorSeverity() === 'warning'
+                  ? 'fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-500'
+                  : 'fa-solid fa-circle-exclamation text-rose-600 dark:text-rose-500'
+              "
+              aria-hidden="true"
+            ></i>
+            <div class="flex-1">
+              <h3
+                class="mb-1 font-semibold"
+                [ngClass]="
+                  errorSeverity() === 'warning'
+                    ? 'text-amber-800 dark:text-amber-200'
+                    : 'text-rose-800 dark:text-rose-200'
+                "
+              >
+                {{ errorSeverity() === "warning" ? "Información importante" : "Error en el procesamiento" }}
+              </h3>
+              <p
+                class="whitespace-pre-line text-sm"
+                [ngClass]="
+                  errorSeverity() === 'warning'
+                    ? 'text-amber-700 dark:text-amber-300'
+                    : 'text-rose-700 dark:text-rose-300'
+                "
+              >
+                {{ error() }}
+              </p>
             </div>
           </div>
           }
@@ -312,12 +184,7 @@
 
         <!-- Results Section -->
         @if (analysisResult()) {
-        <div
-          class="space-y-8"
-          data-aos="fade-up"
-          data-aos-delay="200"
-          id="results-section"
-        >
+        <div class="results-enter space-y-6" id="results-section">
           <app-medical-short-disclaimer></app-medical-short-disclaimer>
 
           @if (analysisStatusSummary()) {
@@ -326,215 +193,77 @@
           ></app-analysis-status-summary>
           }
 
-          <!-- Quick Stats Cards -->
-          @if (stats()) {
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-            <!-- Total -->
-            <div
-              class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
-            >
-              <div class="text-3xl font-bold">{{ stats()?.total }}</div>
-              <div class="text-sm opacity-90">Total</div>
-            </div>
-            <!-- Normal -->
-            <div
-              class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
-            >
-              <div class="text-3xl font-bold">{{ stats()?.normal }}</div>
-              <div class="text-sm opacity-90">Normales</div>
-            </div>
-            <!-- High -->
-            <div
-              class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
-            >
-              <div class="text-3xl font-bold">{{ stats()?.high }}</div>
-              <div class="text-sm opacity-90">Altos</div>
-            </div>
-            <!-- Low -->
-            <div
-              class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
-            >
-              <div class="text-3xl font-bold">{{ stats()?.low }}</div>
-              <div class="text-sm opacity-90">Bajos</div>
-            </div>
-            <!-- Critical -->
-            <div
-              class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow-lg transform transition-all hover:scale-105"
-            >
-              <div class="text-3xl font-bold">{{ stats()?.critical }}</div>
-              <div class="text-sm opacity-90">Críticos</div>
-            </div>
-          </div>
-          }
-
           <!-- Patient Info -->
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
+          <div class="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
             <!-- Warning if no results detected -->
             @if (analysisResult() && analysisResult()!.results.length === 0) {
-            <div
-              class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-r-lg"
-            >
-              <div class="flex items-start">
-                <svg
-                  class="w-6 h-6 text-yellow-600 mr-3 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  ></path>
-                </svg>
-                <div>
-                  <h4
-                    class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2"
-                  >
-                    Formato de Laboratorio No Estándar
-                  </h4>
-                  <p class="text-sm text-yellow-700 dark:text-yellow-300 mb-2">
-                    No se pudieron extraer valores individuales automáticamente
-                    de este PDF. Esto no significa que haya un error, sino que
-                    el formato específico de este laboratorio es diferente.
-                  </p>
-                  <p class="text-xs text-yellow-600 dark:text-yellow-400">
-                    💡 <strong>Recomendación:</strong> Revise el PDF original
-                    manualmente o solicite al laboratorio un formato digital
-                    actualizado.
-                  </p>
-                </div>
+            <div class="mb-6 flex items-start gap-3 rounded-xl bg-amber-50 p-4 dark:bg-amber-950/20">
+              <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-500" aria-hidden="true"></i>
+              <div>
+                <h4 class="mb-2 font-semibold text-amber-800 dark:text-amber-200">
+                  Formato de laboratorio no estándar
+                </h4>
+                <p class="mb-2 text-sm text-amber-700 dark:text-amber-300">
+                  No se pudieron extraer valores individuales automáticamente de este PDF. Esto no significa que haya un error, sino que el formato específico de este laboratorio es diferente.
+                </p>
+                <p class="text-xs text-amber-600 dark:text-amber-400">
+                  <strong>Recomendación:</strong> revisá el PDF original manualmente o solicitá al laboratorio un formato digital actualizado.
+                </p>
               </div>
             </div>
             }
 
-            <h2
-              class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-            >
-              <svg
-                class="w-6 h-6 mr-3 text-primary-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                ></path>
-              </svg>
-              Información del Análisis
+            <h2 class="mb-6 flex items-center gap-3 text-2xl font-bold text-zinc-900 dark:text-white">
+              <i class="fa-solid fa-clipboard-list text-primary-600 dark:text-primary-400" aria-hidden="true"></i>
+              Información del análisis
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                  Paciente
-                </p>
-                <p class="font-semibold text-gray-900 dark:text-white">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div class="rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
+                <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Paciente</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
                   {{ analysisResult()?.patient_name || "No especificado" }}
                 </p>
               </div>
-              <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                  Fecha
-                </p>
-                <p class="font-semibold text-gray-900 dark:text-white">
+              <div class="rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
+                <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Fecha</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
                   {{
                     utilService.formatDate(analysisResult()?.test_date || "") ||
                       "No especificada"
                   }}
                 </p>
               </div>
-              <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                  Laboratorio
-                </p>
-                <p class="font-semibold text-gray-900 dark:text-white">
+              <div class="rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
+                <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Laboratorio</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
                   {{ analysisResult()?.laboratory || "No especificado" }}
                 </p>
               </div>
-              <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                  Total Estudios
-                </p>
-                <p class="font-semibold text-gray-900 dark:text-white">
+              <div class="rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
+                <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Total estudios</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
                   {{ analysisResult()?.results?.length || 0 }}
                 </p>
               </div>
             </div>
           </div>
 
-          <!-- Statistics -->
-          @if (stats()) {
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">
-              Resumen de Resultados
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-              <div
-                class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-              >
-                <div class="text-2xl font-bold text-gray-900 dark:text-white">
-                  {{ stats()?.total }}
-                </div>
-                <div class="text-sm text-gray-700 dark:text-gray-300">
-                  Total
-                </div>
-              </div>
-              <div
-                class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"
-              >
-                <div class="text-2xl font-bold text-green-600">
-                  {{ stats()?.normal }}
-                </div>
-                <div class="text-sm text-green-600">Normales</div>
-              </div>
-              <div
-                class="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg"
-              >
-                <div class="text-2xl font-bold text-orange-600">
-                  {{ stats()?.high }}
-                </div>
-                <div class="text-sm text-orange-600">Altos</div>
-              </div>
-              <div
-                class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-              >
-                <div class="text-2xl font-bold text-blue-600">
-                  {{ stats()?.low }}
-                </div>
-                <div class="text-sm text-blue-600">Bajos</div>
-              </div>
-              <div
-                class="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg"
-              >
-                <div class="text-2xl font-bold text-red-600">
-                  {{ stats()?.critical }}
-                </div>
-                <div class="text-sm text-red-600">Críticos</div>
-              </div>
-            </div>
-          </div>
-          }
-
           <!-- Summary -->
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
+          <div class="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
             @if (statusHeadline()) {
             <div
-              class="mb-4 rounded-xl bg-gray-50 p-4 text-lg font-bold text-gray-900 dark:bg-gray-700 dark:text-white"
+              class="mb-4 flex items-center gap-3 rounded-xl p-4"
+              [ngClass]="statusHeadlineClass()"
             >
-              {{ statusHeadline() }}
+              <i [class]="statusHeadlineIcon()" aria-hidden="true"></i>
+              <span class="text-lg font-bold">{{ statusHeadline() }}</span>
             </div>
             }
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
-              Resumen General
+            <h3 class="mb-4 text-xl font-bold text-zinc-900 dark:text-white">
+              Resumen general
             </h3>
-            <div
-              class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500"
-            >
-              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <div class="rounded-lg bg-primary-50 p-4 dark:bg-primary-900/10">
+              <p class="leading-relaxed text-zinc-700 dark:text-zinc-300">
                 {{ analysisResult()?.summary }}
               </p>
             </div>
@@ -547,40 +276,28 @@
           }
 
           <!-- View Toggle and Filter -->
-          <div class="flex flex-wrap gap-4 justify-center mb-6">
+          <div class="flex flex-wrap justify-center gap-3">
             <button
               (click)="compactView.set(!compactView())"
-              class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-[background-color,transform] duration-150 ease-[var(--ease-out)] hover:bg-primary-700 active:scale-[0.97] active:duration-100"
               [attr.aria-label]="
                 compactView()
                   ? 'Cambiar a vista detallada'
                   : 'Cambiar a vista compacta'
               "
             >
-              <svg
-                class="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
+              <i class="fa-solid fa-table-cells-large text-sm" aria-hidden="true"></i>
               {{ compactView() ? "Explorar resultados" : "Vista compacta" }}
             </button>
 
             @if (abnormalResults().length > 0) {
             <button
               (click)="showOnlyAbnormal.set(!showOnlyAbnormal())"
-              class="inline-flex items-center px-6 py-3 transition-all duration-200 transform hover:scale-105 rounded-xl font-semibold shadow-lg hover:shadow-xl"
+              class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold shadow-sm transition-[background-color,transform] duration-150 ease-[var(--ease-out)] active:scale-[0.97] active:duration-100"
               [ngClass]="
                 showOnlyAbnormal()
-                  ? 'bg-orange-600 hover:bg-orange-700 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200'
+                  ? 'bg-primary-600 hover:bg-primary-700 text-white'
+                  : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-200'
               "
               [attr.aria-label]="
                 showOnlyAbnormal()
@@ -589,21 +306,9 @@
               "
               [attr.aria-pressed]="showOnlyAbnormal()"
             >
-              <svg
-                class="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                ></path>
-              </svg>
+              <i class="fa-solid fa-filter text-sm" aria-hidden="true"></i>
               {{ filterButtonText() }}
-              <span class="ml-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+              <span class="ml-1 rounded-full bg-white/20 px-2 py-0.5 text-xs">
                 {{
                   showOnlyAbnormal()
                     ? abnormalResults().length
@@ -618,148 +323,94 @@
           @if (compactView()) {
           <div class="space-y-2">
             @for (result of visibleResults(); track result.test_name) {
-            <div
-              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow duration-200"
-            >
+            <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
               <!-- Compact Header (always visible) -->
               <button
                 (click)="toggleItem(result.test_name)"
-                class="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                class="flex w-full items-center justify-between px-4 py-3 transition-colors duration-150 ease-[var(--ease-out)] hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
                 [attr.aria-label]="'Ver detalles de ' + result.test_name"
                 [attr.aria-expanded]="isExpanded(result.test_name)"
               >
-                <div class="flex items-center gap-4 flex-1 min-w-0">
-                  <!-- Status indicator -->
-                  <div
-                    [class]="
-                      'flex-shrink-0 w-3 h-3 rounded-full ' +
-                      (result.status === 'normal'
-                        ? 'bg-green-500'
-                        : result.status === 'critical'
-                        ? 'bg-red-600'
-                        : result.status === 'high'
-                        ? 'bg-orange-500'
-                        : 'bg-blue-500')
-                    "
-                  ></div>
+                <div class="flex min-w-0 flex-1 flex-col gap-2 text-left sm:flex-row sm:items-center sm:gap-4">
+                  <div class="flex min-w-0 items-center gap-3 sm:contents">
+                    <!-- Status indicator -->
+                    <div
+                      [class]="'h-3 w-3 flex-shrink-0 rounded-full ' + getStatusDotClass(result.status)"
+                    ></div>
 
-                  <!-- Test name -->
-                  <span
-                    class="font-semibold text-gray-900 dark:text-white text-left truncate"
-                    >{{ result.test_name }}</span
-                  >
-
-                  <!-- Value -->
-                  <div class="flex items-center gap-2 ml-auto">
-                    <span
-                      class="text-lg font-bold text-gray-900 dark:text-white"
-                      >{{ result.value || "N/A" }}</span
-                    >
-                    @if (result.unit) {
-                    <span class="text-sm text-gray-600 dark:text-gray-300">{{
-                      result.unit
+                    <!-- Test name -->
+                    <span class="min-w-0 flex-1 truncate font-semibold text-zinc-900 dark:text-white sm:flex-initial">{{
+                      result.test_name
                     }}</span>
-                    }
                   </div>
 
-                  <!-- Status badge -->
-                  <span
-                    [class]="
-                      'flex-shrink-0 px-2 py-1 rounded-full text-xs font-medium ' +
-                      (result.status === 'normal'
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : result.status === 'critical'
-                        ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                        : result.status === 'high'
-                        ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
-                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400')
-                    "
-                  >
-                    {{ getStatusIcon(result.status) }}
-                    {{ getStatusText(result.status) }}
-                  </span>
+                  <div class="flex items-center gap-2 pl-6 sm:pl-0 sm:ml-auto">
+                    <!-- Value -->
+                    <span class="text-lg font-bold text-zinc-900 dark:text-white">{{
+                      result.value || "N/A"
+                    }}</span>
+                    @if (result.unit) {
+                    <span class="text-sm text-zinc-500 dark:text-zinc-400">{{ result.unit }}</span>
+                    }
+
+                    <!-- Status badge -->
+                    <span
+                      [class]="'flex-shrink-0 rounded-full px-2 py-1 text-xs font-medium ' + getStatusBadgeClass(result.status)"
+                    >
+                      <i [class]="getStatusIconClass(result.status)" aria-hidden="true"></i>
+                      {{ getStatusText(result.status) }}
+                    </span>
+                  </div>
                 </div>
 
                 <!-- Expand icon -->
-                <svg
-                  class="flex-shrink-0 w-5 h-5 ml-3 text-gray-400 transition-transform duration-200"
+                <i
+                  class="fa-solid fa-chevron-down ml-3 flex-shrink-0 text-zinc-400 transition-transform duration-200 ease-[var(--ease-out)]"
                   [class.rotate-180]="isExpanded(result.test_name)"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
+                  aria-hidden="true"
+                ></i>
               </button>
 
               <!-- Expanded content -->
               @if (isExpanded(result.test_name)) {
-              <div
-                class="px-4 pb-4 pt-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50"
-              >
+              <div class="border-t border-zinc-100 bg-zinc-50 px-4 pb-4 pt-2 dark:border-zinc-800 dark:bg-zinc-950/40">
                 <!-- Reference range -->
                 @if (result.reference_range) {
-                <div class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                <div class="mb-3 text-sm text-zinc-600 dark:text-zinc-400">
                   <span class="font-medium">Rango normal:</span>
                   {{ result.reference_range }}
                 </div>
                 }
 
                 <!-- Simple explanation -->
-                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg mb-2">
-                  <h5
-                    class="font-medium text-gray-900 dark:text-white text-sm mb-1"
-                  >
+                <div class="mb-2 rounded-lg bg-white p-3 dark:bg-zinc-900">
+                  <h5 class="mb-1 text-sm font-medium text-zinc-900 dark:text-white">
                     ¿Qué es esto?
                   </h5>
-                  <p class="text-gray-700 dark:text-gray-300 text-sm">
+                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     {{ getPatientMeaning(result) }}
                   </p>
                 </div>
 
                 <!-- Clinical interpretation -->
-                <div
-                  class="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800/50"
-                >
-                  <h5
-                    class="font-medium text-gray-900 dark:text-white text-sm mb-1 flex items-center"
-                  >
-                    <svg
-                      class="w-4 h-4 mr-1 text-amber-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
+                <div class="rounded-lg bg-primary-50 p-3 dark:bg-primary-900/10">
+                  <h5 class="mb-1 flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white">
+                    <i class="fa-solid fa-circle-info text-primary-600 dark:text-primary-400" aria-hidden="true"></i>
                     Interpretación
                   </h5>
-                  <p class="text-gray-700 dark:text-gray-300 text-sm">
+                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
                     {{ getPatientInterpretation(result) }}
                   </p>
                 </div>
 
                 <!-- Warning for abnormal values -->
                 @if (result.status !== 'normal') {
-                <div
-                  class="mt-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800/50"
-                >
-                  <p class="text-red-700 dark:text-red-300 text-sm font-medium">
-                    @if (result.status === 'critical') { ⚠️ Valor crítico.
-                    Requiere atención médica inmediata. } @else if
-                    (result.status === 'high') { ⚠️ Valor elevado. Consulte con
-                    su médico para evaluación. } @else { ⚠️ Valor bajo. Consulte
-                    con su médico si tiene síntomas. }
+                <div [class]="'mt-2 rounded-lg p-3 ' + getSeverityTintClass(result.status)">
+                  <p [class]="'text-sm font-medium ' + getSeverityTextClass(result.status)">
+                    @if (result.status === 'critical') { Valor crítico. Requiere atención médica
+                    inmediata. } @else if (result.status === 'high') { Valor elevado. Consulte con
+                    su médico para evaluación. } @else { Valor bajo. Consulte con su médico si
+                    tiene síntomas. }
                   </p>
                 </div>
                 }
@@ -768,20 +419,15 @@
                   <button
                     (click)="explainBetter(result)"
                     [disabled]="isExplaining(result)"
-                    class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                    class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-150 ease-[var(--ease-out)] hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-zinc-400"
                     [attr.aria-label]="'Explicar mejor ' + result.test_name"
                   >
-                    {{
-                      isExplaining(result)
-                        ? "Generando..."
-                        : "💬 Explicame mejor"
-                    }}
+                    <i class="fa-solid fa-comment-dots text-sm" aria-hidden="true"></i>
+                    {{ isExplaining(result) ? "Generando..." : "Explicame mejor" }}
                   </button>
 
                   @if (getAiExplanation(result)) {
-                  <div
-                    class="mt-3 rounded-lg border border-primary-100 bg-primary-50 p-3 text-sm text-gray-700 dark:border-primary-800/60 dark:bg-primary-900/20 dark:text-gray-300"
-                  >
+                  <div class="mt-3 rounded-lg border border-primary-100 bg-primary-50 p-3 text-sm text-zinc-700 dark:border-primary-800/60 dark:bg-primary-900/20 dark:text-zinc-300">
                     {{ getAiExplanation(result) }}
                   </div>
                   }
@@ -797,51 +443,37 @@
           @if (!compactView()) {
           <div class="space-y-4">
             @for (result of visibleResults(); track result.test_name) {
-            <div
-              class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-200"
-            >
-              <div class="flex items-start justify-between mb-4">
+            <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <div class="mb-4 flex items-start justify-between">
                 <div class="flex-1">
-                  <h4
-                    class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
-                  >
+                  <h4 class="mb-2 text-lg font-semibold text-zinc-900 dark:text-white">
                     {{ result.test_name }}
                   </h4>
-                  <div class="flex items-center space-x-4 mb-3">
-                    <span
-                      class="text-2xl font-bold text-gray-900 dark:text-white"
-                      >{{ result.value || "N/A" }}</span
-                    >
-                    @if (result.unit) {
-                    <span class="text-gray-500 dark:text-gray-400">{{
-                      result.unit
+                  <div class="mb-3 flex items-center space-x-4">
+                    <span class="text-2xl font-bold text-zinc-900 dark:text-white">{{
+                      result.value || "N/A"
                     }}</span>
+                    @if (result.unit) {
+                    <span class="text-zinc-500 dark:text-zinc-400">{{ result.unit }}</span>
                     }
                   </div>
                   @if (result.reference_range) {
-                  <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <div class="mb-2 text-sm text-zinc-500 dark:text-zinc-400">
                     <span class="font-medium">Rango normal:</span>
                     {{ result.reference_range }}
                   </div>
                   }
                 </div>
-                <div
-                  [class]="
-                    'px-3 py-1 rounded-full text-sm font-medium border ' +
-                    getStatusColor(result.status)
-                  "
-                >
-                  <span class="mr-1">{{ getStatusIcon(result.status) }}</span>
+                <div [class]="'rounded-full border px-3 py-1 text-sm font-medium ' + getStatusColor(result.status)">
+                  <i [class]="getStatusIconClass(result.status)" aria-hidden="true"></i>
                   {{ getStatusText(result.status) }}
                 </div>
               </div>
 
               <!-- Simple explanation always visible -->
-              <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-3">
-                <h5 class="font-medium text-gray-900 dark:text-white mb-2">
-                  ¿Qué significa?
-                </h5>
-                <p class="text-gray-700 dark:text-gray-300">
+              <div class="mb-3 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800">
+                <h5 class="mb-2 font-medium text-zinc-900 dark:text-white">¿Qué significa?</h5>
+                <p class="text-zinc-700 dark:text-zinc-300">
                   {{ getPatientMeaning(result) }}
                 </p>
               </div>
@@ -849,46 +481,22 @@
               <!-- Warning for abnormal values -->
               @if (result.status === 'high' || result.status === 'critical' ||
               result.status === 'low') {
-              <div
-                class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 mb-3"
-              >
-                <h5
-                  class="font-medium text-red-800 dark:text-red-200 mb-2 flex items-center"
-                >
-                  <svg
-                    class="w-4 h-4 mr-2 text-red-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  ⚠️ Advertencia
+              <div [class]="'mb-3 rounded-lg p-4 ' + getSeverityTintClass(result.status)">
+                <h5 [class]="'mb-2 flex items-center gap-2 font-medium ' + getSeverityTextClass(result.status)">
+                  <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                  Advertencia
                 </h5>
                 @if (result.status === 'high') {
-                <p
-                  class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium"
-                >
-                  Este valor está elevado. Consulte con su médico para
-                  evaluación.
+                <p [class]="'text-sm font-medium leading-relaxed ' + getSeverityTextClass(result.status)">
+                  Este valor está elevado. Consulte con su médico para evaluación.
                 </p>
                 } @else if (result.status === 'critical') {
-                <p
-                  class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium"
-                >
-                  ⚠️ Valor crítico. Requiere atención médica inmediata.
+                <p [class]="'text-sm font-medium leading-relaxed ' + getSeverityTextClass(result.status)">
+                  Valor crítico. Requiere atención médica inmediata.
                 </p>
                 } @else {
-                <p
-                  class="text-red-700 dark:text-red-300 text-sm leading-relaxed font-medium"
-                >
-                  Este valor está bajo. Consulte con su médico si tiene
-                  síntomas.
+                <p [class]="'text-sm font-medium leading-relaxed ' + getSeverityTextClass(result.status)">
+                  Este valor está bajo. Consulte con su médico si tiene síntomas.
                 </p>
                 }
               </div>
@@ -896,30 +504,12 @@
 
               <!-- Clinical interpretation (conditionally shown) -->
               @if (showDetailedView()) {
-              <div
-                class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800"
-              >
-                <h5
-                  class="font-medium text-gray-900 dark:text-white mb-2 flex items-center"
-                >
-                  <svg
-                    class="w-4 h-4 mr-2 text-amber-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
+              <div class="rounded-lg bg-primary-50 p-4 dark:bg-primary-900/10">
+                <h5 class="mb-2 flex items-center gap-2 font-medium text-zinc-900 dark:text-white">
+                  <i class="fa-solid fa-circle-info text-primary-600 dark:text-primary-400" aria-hidden="true"></i>
                   ¿Qué indican los valores altos y bajos?
                 </h5>
-                <p
-                  class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed"
-                >
+                <p class="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                   {{ getPatientInterpretation(result) }}
                 </p>
               </div>
@@ -929,20 +519,15 @@
                 <button
                   (click)="explainBetter(result)"
                   [disabled]="isExplaining(result)"
-                  class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                  class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-150 ease-[var(--ease-out)] hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-zinc-400"
                   [attr.aria-label]="'Explicar mejor ' + result.test_name"
                 >
-                  {{
-                    isExplaining(result)
-                      ? "Generando..."
-                      : "💬 Explicame mejor"
-                  }}
+                  <i class="fa-solid fa-comment-dots text-sm" aria-hidden="true"></i>
+                  {{ isExplaining(result) ? "Generando..." : "Explicame mejor" }}
                 </button>
 
                 @if (getAiExplanation(result)) {
-                <div
-                  class="mt-3 rounded-lg border border-primary-100 bg-primary-50 p-3 text-sm text-gray-700 dark:border-primary-800/60 dark:bg-primary-900/20 dark:text-gray-300"
-                >
+                <div class="mt-3 rounded-lg border border-primary-100 bg-primary-50 p-3 text-sm text-zinc-700 dark:border-primary-800/60 dark:bg-primary-900/20 dark:text-zinc-300">
                   {{ getAiExplanation(result) }}
                 </div>
                 }
@@ -955,35 +540,17 @@
           <!-- Recommendations -->
           @if (analysisResult()?.recommendations &&
           analysisResult()!.recommendations.length > 0) {
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-medical p-6">
-            <h3
-              class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center"
-            >
-              <svg
-                class="w-5 h-5 mr-2 text-yellow-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                ></path>
-              </svg>
-              Recomendaciones Generales
+          <div class="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+            <h3 class="mb-4 flex items-center gap-2 text-xl font-bold text-zinc-900 dark:text-white">
+              <i class="fa-solid fa-lightbulb text-amber-500" aria-hidden="true"></i>
+              Recomendaciones generales
             </h3>
             <div class="space-y-3">
               @for (recommendation of analysisResult()?.recommendations; track
               $index) {
-              <div class="flex items-start">
-                <div
-                  class="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3 flex-shrink-0"
-                ></div>
-                <p class="text-gray-700 dark:text-gray-300">
-                  {{ recommendation }}
-                </p>
+              <div class="flex items-start gap-3">
+                <div class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-500"></div>
+                <p class="text-zinc-700 dark:text-zinc-300">{{ recommendation }}</p>
               </div>
               }
             </div>
@@ -991,36 +558,17 @@
           }
 
           <!-- Medical Disclaimer -->
-          <div
-            class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6"
-          >
-            <div class="flex items-start">
-              <svg
-                class="w-6 h-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                ></path>
-              </svg>
+          <div class="rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-900/50 dark:bg-amber-950/20">
+            <div class="flex items-start gap-3">
+              <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0 text-amber-600 dark:text-amber-500" aria-hidden="true"></i>
               <div>
-                <h4
-                  class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2"
-                >
-                  Aviso Médico Importante
+                <h4 class="mb-2 font-semibold text-amber-800 dark:text-amber-200">
+                  Aviso médico importante
                 </h4>
-                <p
-                  class="text-yellow-700 dark:text-yellow-300 text-sm leading-relaxed"
-                >
+                <p class="text-sm leading-relaxed text-amber-700 dark:text-amber-300">
                   Esta herramienta proporciona información educativa únicamente.
                   <strong>No reemplaza la consulta médica profesional.</strong>
-                  Siempre consulte a su médico para la interpretación correcta
-                  de sus análisis y decisiones sobre su salud.
+                  Siempre consulte a su médico para la interpretación correcta de sus análisis y decisiones sobre su salud.
                 </p>
               </div>
             </div>
@@ -1030,22 +578,10 @@
           <div class="text-center">
             <button
               (click)="limpiar()"
-              class="inline-flex items-center px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+              class="inline-flex items-center gap-2 rounded-lg bg-zinc-100 px-6 py-3 text-sm font-semibold text-zinc-700 transition-colors duration-150 ease-[var(--ease-out)] hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
               aria-label="Limpiar y analizar otro archivo"
             >
-              <svg
-                class="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                ></path>
-              </svg>
+              <i class="fa-solid fa-arrow-rotate-left text-sm" aria-hidden="true"></i>
               Analizar otro archivo
             </button>
           </div>
